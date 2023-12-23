@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useContext } from 'react';
+import {ConnectProvider, Connect} from 'react-connect-lines'
+import LeftBar from './LeftBar/LeftBar';
+import TopBar from './TopBar/TopBar';
+import RightBar from './RightBar/RightBar';
+import Canvas from './Canvas/Canvas';
 
-function App() {
+export const GlobalStateContext = React.createContext();
+
+const App = () => {
+  const [showConnections, setShowConnections] = useState(false);
+  const [mode, setMode] = useState("pinplanner");
+  const [rightBarOpen, setRightBarOpen] = useState(true);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ConnectProvider>
+      <GlobalStateContext.Provider value={{ 
+        mode, 
+        setMode, 
+        showConnections, 
+        setShowConnections,
+        setRightBarOpen
+        }}>
+            
+        <TopBar/>
+        <div style={{display: "flex", height: "calc(100vh - 55px)"}}>
+            <LeftBar/>
+            
+            <Canvas/>
+            
+            { rightBarOpen && <RightBar/>}
+        </div>
+
+      </GlobalStateContext.Provider>
+    </ConnectProvider>  
   );
-}
+};
 
 export default App;
+
+// soll es möglich sein 2 devices gleichzeitig zu öffnen?

@@ -6,7 +6,6 @@ import {Xwrapper} from 'react-xarrows';
 
 export default () => {
     const [panningEnabled, setPanningEnabled] = useState(true)
-
 	
 	const debugMarks = []
 	for(let i = 0; i < 11280; i += 500) {

@@ -5,13 +5,14 @@ import s from "./Device.css"
 import {useXarrow} from 'react-xarrows';
 import {useTransformEffect} from "react-zoom-pan-pinch"
 
-export default ({setPanningEnabled, id, dev}) => {
+export default ({setPanningEnabled, dev}) => {
     const update = useXarrow();
     const [scale, setScale] = useState(1)
 
     useTransformEffect(({ state }) => {
         setScale(state.scale)
-    	console.log(state)
+        console.log(state)
+        
         return () => {};
     });
 	// 4* 1620/940

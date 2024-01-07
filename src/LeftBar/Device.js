@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Draggable from 'react-draggable';
 import { colors as c } from "../styles.js";
 import s from "./Device.css"
 import { GlobalStateContext } from "../App.js"
 import { useContext } from "react";
 
-export default ({el, index, groupOffset}) => {
+export default ({el}) => {
   	const [position, setPosition] = useState({ x: 0, y: -2 });
 	const [cursor, setCursor ] = useState("grab");
     const { setDevices } = useContext(GlobalStateContext);
+	const positionRef = useRef(null)
 
 	const InnerElement = () => (
 		<>
@@ -19,7 +20,7 @@ export default ({el, index, groupOffset}) => {
 	)
   	
 	return (
-		<div style={s.elementWrapper}>
+		<div style={s.elementWrapper} ref={positionRef}>
 			<InnerElement/>
 			
 			<div style ={{position: "absolute"}}>
@@ -31,6 +32,7 @@ export default ({el, index, groupOffset}) => {
 						setCursor("grab")
 
 						// TODO panning mit reinrechnen
+						// TODO zoom mit reinrechnen
 						setDevices(devices => [
 							...devices,
 							{
@@ -38,7 +40,7 @@ export default ({el, index, groupOffset}) => {
 								name: el.name,
 								startPosition: {
 									x: position.x - 300 - devices.length * 300,
-									y: position.y + 65 + index * 48 + groupOffset
+									y: position.y - 55 + positionRef.current.getBoundingClientRect().top
 								},
 								services: []
 							}

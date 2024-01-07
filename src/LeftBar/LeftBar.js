@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Draggable from 'react-draggable';
 import { colors as c } from "../styles.js";
 import s from "./LeftBar.css"
 import Device from "./Device.js"
@@ -29,24 +28,20 @@ export default () => {
             ]
         }
     ]
-    let groupOffset = - groups[0].elements.length * 50 - 51;
 
     return (
         <div style={s.wrapperToFixAutoResize}>
             <div style={s.barWrapper}>
-                {groups.map(g => {
-                    groupOffset += g.elements.length * 50 + 51
-                    
-                    return (
-                        <DeviceDropdown group={g} groupOffset={groupOffset}/>
+                {groups.map(g => (
+                        <DeviceDropdown group={g}/>
                     )
-                })}
+                )}
             </div>
         </div>
     )
 }
 
-const DeviceDropdown = ({group, groupOffset}) => {
+const DeviceDropdown = ({group}) => {
     const [open, setOpen ] = useState(false);
 
     return (
@@ -60,8 +55,8 @@ const DeviceDropdown = ({group, groupOffset}) => {
             <hr style={s.hr} />
             {open &&
                 <div style={s.elementsWrapper}>
-                    {group.elements.map((el, j) => (
-                    	<Device el={el} index={j} groupOffset={groupOffset}/>
+                    {group.elements.map(el => (
+                    	<Device el={el}/>
                     ))}
                     <hr style={s.hr} />
                 </div>

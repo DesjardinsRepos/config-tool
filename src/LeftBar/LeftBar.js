@@ -29,18 +29,24 @@ export default () => {
             ]
         }
     ]
+    let groupOffset = - groups[0].elements.length * 50 - 51;
+
     return (
         <div style={s.wrapperToFixAutoResize}>
             <div style={s.barWrapper}>
-                {groups.map(g => (
-                    <DeviceDropdown group={g}/>
-                ))}
+                {groups.map(g => {
+                    groupOffset += g.elements.length * 50 + 51
+                    
+                    return (
+                        <DeviceDropdown group={g} groupOffset={groupOffset}/>
+                    )
+                })}
             </div>
         </div>
     )
 }
 
-const DeviceDropdown = ({group}) => {
+const DeviceDropdown = ({group, groupOffset}) => {
     const [open, setOpen ] = useState(false);
 
     return (
@@ -54,8 +60,8 @@ const DeviceDropdown = ({group}) => {
             <hr style={s.hr} />
             {open &&
                 <div style={s.elementsWrapper}>
-                    {group.elements.map(el => (
-                    	<Device el={el}/>
+                    {group.elements.map((el, j) => (
+                    	<Device el={el} index={j} groupOffset={groupOffset}/>
                     ))}
                     <hr style={s.hr} />
                 </div>

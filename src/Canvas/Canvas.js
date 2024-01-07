@@ -3,10 +3,13 @@ import Device from "../Device/Device"
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import Connections from "../Connections/Connections"
 import {Xwrapper} from 'react-xarrows';
+import { GlobalStateContext } from "../App.js"
+import { useContext } from "react";
 
 export default () => {
     const [panningEnabled, setPanningEnabled] = useState(true)
-	
+    const { devices } = useContext(GlobalStateContext);
+
 	const debugMarks = []
 	for(let i = 0; i < 11280; i += 500) {
 		for(let j = 0; j < 19440; j += 500) 
@@ -29,8 +32,9 @@ export default () => {
                             contentStyle={{width: "19440px", height: "11280px", backgroundColor: "white"}}
                         >
                         {debugMarks}
-                            <Device setPanningEnabled={setPanningEnabled} id="dev0"/>
-                            <Device setPanningEnabled={setPanningEnabled} id="dev1"/>
+                        {devices.map(d => (
+                            <Device dev={d} setPanningEnabled={setPanningEnabled}/>
+                        ))}
                         </TransformComponent>
                         
                         <Connections/>

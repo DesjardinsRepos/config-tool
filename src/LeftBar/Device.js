@@ -2,10 +2,13 @@ import { useState } from 'react';
 import Draggable from 'react-draggable';
 import { colors as c } from "../styles.js";
 import s from "./Device.css"
+import { GlobalStateContext } from "../App.js"
+import { useContext } from "react";
 
-export default ({el}) => {
+export default ({el, index, groupOffset}) => {
   	const [position, setPosition] = useState({ x: 0, y: -2 });
 	const [cursor, setCursor ] = useState("grab");
+    const { setDevices } = useContext(GlobalStateContext);
 
 	const InnerElement = () => (
 		<>
@@ -26,7 +29,20 @@ export default ({el}) => {
 					onStop={() => {
 						setPosition({ x: 0, y: -2 });
 						setCursor("grab")
-						alert(JSON.stringify(position))
+
+						// TODO panning mit reinrechnen
+						setDevices(devices => [
+							...devices,
+							{
+								id: "oij09834q",
+								name: el.name,
+								startPosition: {
+									x: position.x - 300 - devices.length * 300,
+									y: position.y + 65 + index * 48 + groupOffset
+								},
+								services: []
+							}
+						])
 					}}
 				    onDrag={(e, ui) => {
 						const { x, y } = ui;

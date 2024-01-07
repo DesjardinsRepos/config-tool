@@ -11,6 +11,56 @@ const App = () => {
   const [showConnections, setShowConnections] = useState(false);
   const [mode, setMode] = useState("pinplanner");
   const [rightBarOpen, setRightBarOpen] = useState(true);
+
+  const [devices, setDevices] = useState([
+    {
+      id: "dev0",
+      name: "3-ACHS-PORTAL",
+      services: [
+        {
+          id: "ser0",
+          name: "Electrical Connection Sensor"
+        },
+        {
+          id: "ser1",
+          name: "Electrical Connection Sensor"
+        },
+        {
+          id: "ser2",
+          name: "Electrical Connection Sensor"
+        }
+      ],
+      startPosition: {
+        x: 0,
+        y: 0
+      },
+      templateDevice: "https://api.goldi-labs.de/devices/9d9fcf04-c291-426f-8b06-fa237918564e"
+    },
+    {
+      id: "dev1",
+      name: "3-ACHS-PORTAL",
+      services: [
+        {
+          id: "ser0",
+          name: "Electrical Connection Sensor"
+        },
+        {
+          id: "ser1",
+          name: "Electrical Connection Sensor"
+        },
+        {
+          id: "ser2",
+          name: "Electrical Connection Sensor"
+        }
+      ],
+      startPosition: {
+        x: 100,
+        y: 100
+      },
+      templateDevice: "https://api.goldi-labs.de/devices/9d9fcf04-c291-426f-8b06-fa237918564e"
+    }
+  ]);
+
   return (
     <ConnectProvider>
       <GlobalStateContext.Provider value={{ 
@@ -18,9 +68,10 @@ const App = () => {
         setMode, 
         showConnections, 
         setShowConnections,
-        setRightBarOpen
+        setRightBarOpen,
+        devices,
+        setDevices
         }}>
-            
         <TopBar/>
         <div style={{display: "flex", height: "calc(100vh - 55px)"}}>
             <LeftBar/>
@@ -36,5 +87,3 @@ const App = () => {
 };
 
 export default App;
-
-// soll es möglich sein 2 devices gleichzeitig zu öffnen?

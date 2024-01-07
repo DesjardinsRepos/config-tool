@@ -5,7 +5,7 @@ import s from "./Device.css"
 import {useXarrow} from 'react-xarrows';
 import {useTransformEffect} from "react-zoom-pan-pinch"
 
-export default ({setPanningEnabled, id}) => {
+export default ({setPanningEnabled, id, dev}) => {
     const update = useXarrow();
     const [scale, setScale] = useState(1)
 
@@ -21,17 +21,20 @@ export default ({setPanningEnabled, id}) => {
             onStop={() => setPanningEnabled(true)}
             onDrag={update}
 			bounds="parent"
-			defaultPosition={{x:6480*(1+1.5/4),y:3760*(1+1.5/4)}}
+			defaultPosition={{
+                x:6480*(1+1.5/4) + dev.startPosition.x,
+                y:3760*(1+1.5/4) + dev.startPosition.y
+            }}
         >
             <div style={s.deviceWrapper}>
                 <div style={s.header}>
                     <img style={s.img}/>
-                    <h3 style={s.title}>3-ACHS-PORTAL</h3>
+                    <h3 style={s.title}>{dev.name}</h3>
                     <img style={s.settings} src={require("../media/settings.png")}/>
                 </div>
                 <div style={s.servicesWrapper}>
-                    {[1, 2, 3].map(s => (
-                        <Service id={`${id}-${s}`}/>
+                    {dev.services.map(s => (
+                        <Service ser={{...s, parentId: dev.id}}/>
                     ))}
                 </div>
             </div>

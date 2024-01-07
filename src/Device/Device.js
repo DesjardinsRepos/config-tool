@@ -5,26 +5,20 @@ import s from "./Device.css"
 import {useXarrow} from 'react-xarrows';
 import {useTransformEffect} from "react-zoom-pan-pinch"
 
-export default ({setPanningEnabled, dev}) => {
+export default ({setPanningEnabled, dev, utils}) => {
     const update = useXarrow();
-    const [scale, setScale] = useState(1)
 
-    useTransformEffect(({ state }) => {
-        setScale(state.scale)
-        console.log(state)
-        
-        return () => {};
-    });
 	// 4* 1620/940
     return (
-        <Draggable scale={scale} 
+        <Draggable scale={utils.instance.transformState.scale} 
             onStart={() => setPanningEnabled(false)} 
             onStop={() => setPanningEnabled(true)}
             onDrag={update}
 			bounds="parent"
 			defaultPosition={{
-                x:6480*(1+1.5/4) + dev.startPosition.x,
-                y:3760*(1+1.5/4) + dev.startPosition.y
+                x: (-utils.instance.transformState.positionX + dev.startPosition.x) / utils.instance.transformState.scale 
+                    + dev.startPosition.xDeviceOffset,
+                y: (-utils.instance.transformState.positionY + dev.startPosition.y) / utils.instance.transformState.scale
             }}
         >
             <div style={s.deviceWrapper}>
@@ -42,3 +36,6 @@ export default ({setPanningEnabled, dev}) => {
         </Draggable>            
     )
 }
+
+// klein: zu niedrig, zu rechts
+// groß: zu hoch, zu links

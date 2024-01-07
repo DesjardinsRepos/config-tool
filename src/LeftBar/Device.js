@@ -30,16 +30,15 @@ export default ({el}) => {
 					onStop={() => {
 						setPosition({ x: 0, y: -2 });
 						setCursor("grab")
-
-						// TODO panning mit reinrechnen
-						// TODO zoom mit reinrechnen
+						
 						setDevices(devices => [
 							...devices,
 							{
 								id: "oij09834q",
 								name: el.name,
 								startPosition: {
-									x: position.x - 300 - devices.length * 300,
+									x: position.x - 300,
+									xDeviceOffset: - devices.length * 300, // solange das sich nicht resettet passt das
 									y: position.y - 55 + positionRef.current.getBoundingClientRect().top
 								},
 								services: []

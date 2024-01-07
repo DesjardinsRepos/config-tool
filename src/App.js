@@ -32,7 +32,8 @@ const App = () => {
       ],
       startPosition: {
         x: 0,
-        y: 0
+        y: 0,
+        xDeviceOffset: 0,
       },
       templateDevice: "https://api.goldi-labs.de/devices/9d9fcf04-c291-426f-8b06-fa237918564e"
     },
@@ -55,7 +56,8 @@ const App = () => {
       ],
       startPosition: {
         x: 100,
-        y: 100
+        y: 100,
+        xDeviceOffset: 0,
       },
       templateDevice: "https://api.goldi-labs.de/devices/9d9fcf04-c291-426f-8b06-fa237918564e"
     }

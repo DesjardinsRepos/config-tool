@@ -31,9 +31,10 @@ export default () => {
                             wrapperStyle={{width: "100%", height: "100%"}} 
                             contentStyle={{width: "19440px", height: "11280px", backgroundColor: "white"}}
                         >
+                            {console.log(utils)}
                         {debugMarks}
                         {devices.map(d => (
-                            <Device dev={d} setPanningEnabled={setPanningEnabled}/>
+                            <Device dev={d} setPanningEnabled={setPanningEnabled} utils={utils}/>
                         ))}
                         </TransformComponent>
                         

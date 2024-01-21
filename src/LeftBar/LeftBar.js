@@ -1,38 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { colors as c } from "../styles.js";
 import s from "./LeftBar.css"
 import Device from "./Device.js"
+import { APIClient } from '@cross-lab-project/api-client';
+
+const apiClient = new APIClient('https://api.goldi-labs.de');
 
 export default () => {
-    const groups = [
-        {
-            name: "Group 1",
-            elements: [
-                {
-                    name: "Element 1"
-                },
-                {
-                    name: "Element 2"
-                }
-            ]
-        },
-        {
-            name: "Group 2",
-            elements: [
-                {
-                    name: "Element 1"
-                },
-                {
-                    name: "Element 2"
-                }
-            ]
-        }
-    ]
+    const [apiLoading, setApiLoaded] = useState(true);
+    const [devices, setDevices] = useState([]);
+
+    useEffect(() => {(async () => {
+        await apiClient.login("fabe1847", "(desjardins2)");
+        apiClient.listDevices()
+        .then(devices => {
+            setDevices([{name: "Everything", elements: devices}])
+            setApiLoaded();
+            console.log(devices);
+        })
+        .catch(e => console.log(e))
+    })()}, [])
 
     return (
         <div style={s.wrapperToFixAutoResize}>
             <div style={s.barWrapper}>
-                {groups.map(g => (
+                {devices.map(g => apiLoading ? (<></>) : (
                         <DeviceDropdown group={g}/>
                     )
                 )}

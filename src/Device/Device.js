@@ -3,17 +3,15 @@ import Draggable from "react-draggable";
 import Service from "./Service"
 import s from "./Device.css"
 import {useXarrow} from 'react-xarrows';
-import {useTransformEffect} from "react-zoom-pan-pinch"
 
 export default ({setPanningEnabled, dev, utils}) => {
     const update = useXarrow();
-
 	// 4* 1620/940
     return (
         <Draggable scale={utils.instance.transformState.scale} 
             onStart={() => setPanningEnabled(false)} 
             onStop={() => setPanningEnabled(true)}
-            onDrag={update}
+            onDrag={() => update()}
 			bounds="parent"
 			defaultPosition={{
                 x: (-utils.instance.transformState.positionX + dev.startPosition.x) / utils.instance.transformState.scale 

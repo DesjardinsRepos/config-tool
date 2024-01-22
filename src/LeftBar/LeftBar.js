@@ -3,6 +3,8 @@ import { colors as c } from "../styles.js";
 import s from "./LeftBar.css"
 import Device from "./Device.js"
 import { APIClient } from '@cross-lab-project/api-client';
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const apiClient = new APIClient('https://api.goldi-labs.de');
 
@@ -59,9 +61,10 @@ export default () => {
     return (
         <div style={s.wrapperToFixAutoResize}>
             <div style={s.barWrapper}>
-                {Object.keys(devices).map(key => apiLoading ? (<></>) : (
+                {apiLoading 
+                    ? <Skeleton count={3} baseColor="#CCDCEC" height="40px" style={{marginBottom: "5px"}}/>
+                    : Object.keys(devices).map(key =>
                         <DeviceDropdown name={key} devices={devices[key]}/>
-                    )
                 )}
             </div>
         </div>

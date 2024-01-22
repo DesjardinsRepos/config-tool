@@ -41,7 +41,7 @@ export default ({el}) => {
 									xDeviceOffset: - devices.length * 300, // solange das sich nicht resettet passt das
 									y: position.y - 55 + positionRef.current.getBoundingClientRect().top
 								},
-								services: []
+								...el
 							}
 						])
 					}}

@@ -19,15 +19,15 @@ const App = () => {
       services: [
         {
           id: "ser0",
-          name: "Electrical Connection Sensor"
+          serviceId: "Electrical Connection Sensor"
         },
         {
           id: "ser1",
-          name: "Electrical Connection Sensor"
+          serviceId: "Electrical Connection Sensor"
         },
         {
           id: "ser2",
-          name: "Electrical Connection Sensor"
+          serviceId: "Electrical Connection Sensor"
         }
       ],
       startPosition: {
@@ -43,15 +43,15 @@ const App = () => {
       services: [
         {
           id: "ser0",
-          name: "Electrical Connection Sensor"
+          serviceId: "Electrical Connection Sensor"
         },
         {
           id: "ser1",
-          name: "Electrical Connection Sensor"
+          serviceId: "Electrical Connection Sensor"
         },
         {
           id: "ser2",
-          name: "Electrical Connection Sensor"
+          serviceId: "Electrical Connection Sensor"
         }
       ],
       startPosition: {

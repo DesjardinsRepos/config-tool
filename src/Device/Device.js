@@ -26,7 +26,7 @@ export default ({setPanningEnabled, dev, utils}) => {
                     <img style={s.settings} src={require("../media/settings.png")}/>
                 </div>
                 <div style={s.servicesWrapper}>
-                    {dev.services.map(s => (
+                    {dev.services && dev.services.map(s => (
                         <Service ser={{...s, parentId: dev.id}}/>
                     ))}
                 </div>

@@ -26,7 +26,10 @@ export default {
         margin: "auto 5px auto 15px"
     },
     groupText: {
-        margin: "auto auto auto 10px"
+        margin: "auto auto auto 10px",
+        maxHeight: "45px",
+        maxWidth: "140px",
+        overflow: "hidden"
     },
     dropButton: {
         margin: "auto 10px", 

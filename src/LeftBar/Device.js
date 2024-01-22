@@ -31,7 +31,7 @@ export default ({el}) => {
 						setPosition({ x: 0, y: -2 });
 						setCursor("grab")
 						
-						setDevices(devices => [
+						setDevices(devices => [ // nur wenn in canvas
 							...devices,
 							{
 								id: "oij09834q",

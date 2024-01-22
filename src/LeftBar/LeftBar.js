@@ -29,31 +29,26 @@ export default () => {
                     })
 
                     // add each device to config
-                    group.devices.forEach(async dev => {
+                    group.devices.forEach(dev => {
+                        loadCount = loadCount - 1
 
-                        // get services for each device
-                        // const deviceData = await apiClient.getDevice(dev.url)
+                        apiClient.getDevice(dev.url).then(completeDevice => {
+                            setDevices(() => {
 
-                        setDevices(() => {
+                                // seems like useEffect triggers all this twice, only add new devices
+                                if(!devices[d.description].some(device => device.url === completeDevice.url)) {
+                                    devices[d.description] = [...devices[d.description], completeDevice]
+                                }
+                                return devices
+                            })
 
-                            // generate device attributes from apiObjects (can be replaced with api request)
-                            devices[d.description] = [...devices[d.description], ( () => {
-                                let deviceWithAttributes
-                                apiObjects.forEach(obj => {
-                                    if(obj.url === dev.url) {
-                                        deviceWithAttributes = obj
-                                    }}
-                                )
-                                return deviceWithAttributes
-                            })()]
-
-                            return devices
+                            loadCount = loadCount + 1
+                            if(loadCount === 0) setApiLoaded()
                         })
                     })
 
                     loadCount = loadCount + 1
                     if(loadCount === 0) setApiLoaded()
-                    console.log(devices)
                 })
             })
             

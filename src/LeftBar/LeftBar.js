@@ -5,6 +5,7 @@ import Device from "./Device.js"
 import { APIClient } from '@cross-lab-project/api-client';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import password from '../password.js'
 
 const apiClient = new APIClient('https://api.goldi-labs.de');
 
@@ -13,7 +14,7 @@ export default () => {
     const [devices, setDevices] = useState({});
 
     useEffect(() => {(async () => {
-        await apiClient.login("fabe1847", "(desjardins2)");
+        await apiClient.login("fabe1847", password)
         var loadCount = 0;
 
         apiClient.listDevices()
@@ -45,12 +46,12 @@ export default () => {
                             })
 
                             loadCount = loadCount + 1
-                            if(loadCount === 0) setApiLoaded()
+                            if(!loadCount) setApiLoaded()
                         })
                     })
 
                     loadCount = loadCount + 1
-                    if(loadCount === 0) setApiLoaded()
+                    if(!loadCount) setApiLoaded()
                 })
             })
             

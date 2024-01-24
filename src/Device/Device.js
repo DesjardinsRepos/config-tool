@@ -1,40 +1,38 @@
-import {useState} from "react"
 import Draggable from "react-draggable";
 import Service from "./Service"
 import s from "./Device.css"
 import {useXarrow} from 'react-xarrows';
-import {useTransformEffect} from "react-zoom-pan-pinch"
 
-export default ({setPanningEnabled, id}) => {
+export default ({setPanningEnabled, dev, utils}) => {
     const update = useXarrow();
-    const [scale, setScale] = useState(1)
-
-    useTransformEffect(({ state }) => {
-        setScale(state.scale)
-    	console.log(state)
-        return () => {};
-    });
 	// 4* 1620/940
     return (
-        <Draggable scale={scale} 
+        <Draggable scale={utils.instance.transformState.scale} 
             onStart={() => setPanningEnabled(false)} 
             onStop={() => setPanningEnabled(true)}
-            onDrag={update}
+            onDrag={() => update()}
 			bounds="parent"
-			defaultPosition={{x:6480*(1+1.5/4),y:3760*(1+1.5/4)}}
+			defaultPosition={{
+                x: (-utils.instance.transformState.positionX + dev.startPosition.x) / utils.instance.transformState.scale 
+                    + dev.startPosition.xDeviceOffset,
+                y: (-utils.instance.transformState.positionY + dev.startPosition.y) / utils.instance.transformState.scale
+            }}
         >
             <div style={s.deviceWrapper}>
                 <div style={s.header}>
                     <img style={s.img}/>
-                    <h3 style={s.title}>3-ACHS-PORTAL</h3>
+                    <h3 style={s.title}>{dev.name}</h3>
                     <img style={s.settings} src={require("../media/settings.png")}/>
                 </div>
                 <div style={s.servicesWrapper}>
-                    {[1, 2, 3].map(s => (
-                        <Service id={`${id}-${s}`}/>
+                    {dev.services && dev.services.map(s => (
+                        <Service ser={{...s, parentId: dev.id}}/>
                     ))}
                 </div>
             </div>
         </Draggable>            
     )
 }
+
+// klein: zu niedrig, zu rechts
+// groß: zu hoch, zu links

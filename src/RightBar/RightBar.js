@@ -3,7 +3,7 @@ import { GlobalStateContext } from "../App.js"
 import { useContext } from "react";
 
 export default () => {
-    const {  setRightBarOpen } = useContext(GlobalStateContext);
+    const { setRightBarOpen } = useContext(GlobalStateContext);
 
     return (
         <div style={s.barWrapper}>

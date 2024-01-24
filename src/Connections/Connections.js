@@ -18,6 +18,20 @@ export default () => {
         	curveness={0.2} 
         	color="black" 
         	strokeWidth={1}
+            labels={
+                <p onClick={() => alert("label")} style={{
+                    backgroundColor: "#ffffffdd", 
+                    borderRadius: 5
+                }}>edit connection</p>
+            }
+            SVGcanvasProps={{
+                onClick: () => alert("clicked")
+            }}
+            SVGcanvasStyle={{
+                pointerEvents: "all",
+                cursor: "pointer"
+            }}
+            _debug
         />
     )        
 }

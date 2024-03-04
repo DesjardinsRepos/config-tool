@@ -13,7 +13,7 @@ export default () => {
 	const debugMarks = []
 	for(let i = 0; i < 11280; i += 500) {
 		for(let j = 0; j < 19440; j += 500) 
-		debugMarks.push(<p key={i} style={{marginTop: `${i}px`, marginLeft: `${j}px`, position: "absolute"}}>{i}x{j}</p>)
+		debugMarks.push(<p key={i + "." + j} style={{marginTop: `${i}px`, marginLeft: `${j}px`, position: "absolute"}}>{i}x{j}</p>)
 	}
     
     return (
@@ -31,10 +31,10 @@ export default () => {
                             wrapperStyle={{width: "100%", height: "100%"}} 
                             contentStyle={{width: "19440px", height: "11280px", backgroundColor: "white"}}
                         >
-                            {console.log(utils)}
+                            {/*console.log(utils)*/}
                         {debugMarks}
                         {devices.map(d => (
-                            <Device dev={d} setPanningEnabled={setPanningEnabled} utils={utils}/>
+                            <Device dev={d} setPanningEnabled={setPanningEnabled} utils={utils} key={d.id}/>
                         ))}
                         </TransformComponent>
                         

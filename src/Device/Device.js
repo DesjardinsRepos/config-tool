@@ -26,8 +26,8 @@ export default ({setPanningEnabled, dev, utils}) => {
                 </div>
                 <div style={s.servicesWrapper}>
                     {dev.services && dev.services.map(s => (
-                        <Service ser={{...s, parentId: dev.id}}/>
-                    ))}
+                        <Service ser={{...s, parentId: dev.id}} key={s.id}/>
+                        ))}
                 </div>
             </div>
         </Draggable>            

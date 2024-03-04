@@ -8,7 +8,7 @@ import { useContext } from "react";
 export default ({el}) => {
   	const [position, setPosition] = useState({ x: 0, y: -2 });
 	const [cursor, setCursor ] = useState("grab");
-    const { setDevices } = useContext(GlobalStateContext);
+    const { setDevices, devices } = useContext(GlobalStateContext);
 	const positionRef = useRef(null)
 
 	const InnerElement = () => (
@@ -30,18 +30,33 @@ export default ({el}) => {
 					onStop={() => {
 						setPosition({ x: 0, y: -2 });
 						setCursor("grab")
+
+						const devId = (Math.random() + 1).toString(36).substring(2)
+
+						const services = el.services.map(s => ({...s, id: devId + (Math.random() + 1).toString(36).substring(2)}))
+
+						console.log("adding device", {
+							id: devId,
+							startPosition: {
+								x: position.x - 300,
+								xDeviceOffset: - devices.length * 300, // solange das sich nicht resettet passt das
+								y: position.y - 55 + positionRef.current.getBoundingClientRect().top
+							},
+							...el,
+							services: services
+						})
 						
 						setDevices(devices => [ // nur wenn in canvas
 							...devices,
 							{
-								id: "oij09834q",
-								name: el.name,
+								id: devId,
 								startPosition: {
 									x: position.x - 300,
 									xDeviceOffset: - devices.length * 300, // solange das sich nicht resettet passt das
 									y: position.y - 55 + positionRef.current.getBoundingClientRect().top
 								},
-								...el
+								...el,
+								services: services
 							}
 						])
 					}}

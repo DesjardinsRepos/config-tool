@@ -31,7 +31,6 @@ export default () => {
                 pointerEvents: "all",
                 cursor: "pointer"
             }}
-            _debug
         />
     )        
 }

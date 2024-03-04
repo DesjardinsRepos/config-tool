@@ -10,6 +10,10 @@ export default {
         backgroundColor: c.lightBlue, 
         cursor: "pointer"
     },
+    activeShadow: {
+        ...shadows.modC,
+        backgroundColor: "#b5cde3"
+    },
     header: {
         display: "flex"
     },

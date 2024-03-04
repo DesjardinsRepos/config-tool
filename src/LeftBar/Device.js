@@ -30,10 +30,11 @@ export default ({el}) => {
 					onStop={() => {
 						setPosition({ x: 0, y: -2 });
 						setCursor("grab")
+						
+						const length = 10
+						const devId = (Math.random() + 1).toString(36).substring(2).padEnd(length, '0').substring(0, length)
 
-						const devId = (Math.random() + 1).toString(36).substring(2)
-
-						const services = el.services.map(s => ({...s, id: devId + (Math.random() + 1).toString(36).substring(2)}))
+						const services = el.services?.map(s => ({...s, id: devId + (Math.random() + 1).toString(36).substring(2).padEnd(length, '0').substring(0, length)}))
 
 						console.log("adding device", {
 							id: devId,

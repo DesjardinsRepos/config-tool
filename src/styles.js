@@ -32,5 +32,8 @@ export const shadows = {
     },
     e: {
         boxShadow: "inset 0px 3px 5px 0px rgba(67, 67, 74,0.4)"
-    }
+    },
+    modC: {
+        boxShadow: "0px 2px 12px 0px rgba(67, 67, 74, 0.8)"
+    },
 }

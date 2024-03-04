@@ -2,9 +2,17 @@ import Draggable from "react-draggable";
 import Service from "./Service"
 import s from "./Device.css"
 import {useXarrow} from 'react-xarrows';
+import { useContext } from 'react';
+import { GlobalStateContext } from "../App.js"
 
 export default ({setPanningEnabled, dev, utils}) => {
     const update = useXarrow();
+
+    const { 
+        setSelected,
+        selected
+    } = useContext(GlobalStateContext);
+
 	// 4* 1620/940
     return (
         <Draggable scale={utils.instance.transformState.scale} 
@@ -18,8 +26,8 @@ export default ({setPanningEnabled, dev, utils}) => {
                 y: (-utils.instance.transformState.positionY + dev.startPosition.y) / utils.instance.transformState.scale
             }}
         >
-            <div style={s.deviceWrapper}>
-                <div style={s.header}>
+            <div style={selected === dev.id ? {...s.deviceWrapper, ...s.activeShadow} : s.deviceWrapper}>
+                <div style={s.header} onClick={() => setSelected(dev.id)}>
                     <img style={s.img}/>
                     <h3 style={s.title}>{dev.name}</h3>
                     <img style={s.settings} src={require("../media/settings.png")}/>

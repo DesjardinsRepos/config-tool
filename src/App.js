@@ -10,23 +10,22 @@ export const GlobalStateContext = React.createContext();
 const App = () => {
   const [showConnections, setShowConnections] = useState(false);
   const [mode, setMode] = useState("pinplanner");
-  const [rightBarOpen, setRightBarOpen] = useState(true);
 
   const [devices, setDevices] = useState([
     {
-      id: "dev0",
+      id: "jlssfoh1n3",
       name: "3-ACHS-PORTAL",
       services: [
         {
-          id: "ser0",
+          id: "jlssfoh1n3oo8pxmmacz",
           serviceId: "Electrical Connection Sensor"
         },
         {
-          id: "ser1",
+          id: "jlssfoh1n3llm191w4qv",
           serviceId: "Electrical Connection Sensor"
         },
         {
-          id: "ser2",
+          id: "jlssfoh1n3wa8eik5zkl",
           serviceId: "Electrical Connection Sensor"
         }
       ],
@@ -38,19 +37,19 @@ const App = () => {
       templateDevice: "https://api.goldi-labs.de/devices/9d9fcf04-c291-426f-8b06-fa237918564e"
     },
     {
-      id: "dev1",
+      id: "cuj9wefaea",
       name: "3-ACHS-PORTAL",
       services: [
         {
-          id: "ser0",
+          id: "cuj9wefaeao2dhowbnzl",
           serviceId: "Electrical Connection Sensor"
         },
         {
-          id: "ser1",
+          id: "cuj9wefaea23opa90ipw",
           serviceId: "Electrical Connection Sensor"
         },
         {
-          id: "ser2",
+          id: "cuj9wefaeasi3v4z4irt",
           serviceId: "Electrical Connection Sensor"
         }
       ],
@@ -63,6 +62,17 @@ const App = () => {
     }
   ]);
 
+  const [connections, setConnections] = useState([
+    {
+      type: 2,
+      start: "jlssfoh1n3llm191w4qv-r", 
+      end: "cuj9wefaeasi3v4z4irt-l",
+      id: "tksp5hz8ks"
+    }
+  ])
+
+  const [selected, setSelected] = useState("")
+
   return (
     <ConnectProvider>
       <GlobalStateContext.Provider value={{ 
@@ -70,9 +80,12 @@ const App = () => {
         setMode, 
         showConnections, 
         setShowConnections,
-        setRightBarOpen,
         devices,
-        setDevices
+        setDevices,
+        connections, 
+        setConnections,
+        selected,
+        setSelected
         }}>
         <TopBar/>
         <div style={{display: "flex", height: "calc(100vh - 55px)"}}>
@@ -80,7 +93,7 @@ const App = () => {
             
             <Canvas/>
             
-            { rightBarOpen && <RightBar/>}
+            { selected !== "" && <RightBar/>}
         </div>
 
       </GlobalStateContext.Provider>

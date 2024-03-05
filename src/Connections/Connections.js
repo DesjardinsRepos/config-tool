@@ -21,27 +21,30 @@ export default () => {
     return (
         <>
             {connections.map(c => (
-                <>
-                    {c.type === 2 && <Connect2 c={c} setSelected={setSelected} selected={selected}/>}
-                </>
+                <div key={c.id}>
+                    {c.participants.length === 2 && <Connect2 c={c} setSelected={setSelected} selected={selected}/>}
+                </div>
             ))}
         </>
     )        
 }
 
+// add transparent draggable service circle
+// farbliche umrandung
+
 const Connect2 = ({c, setSelected, selected}) => ( 
     <>
         <Xarrow 
-            start={c.start}
-            end={c.end} 
+            start={c.participants[0]}
+            end={c.participants[1]} 
             showHead={false} 
             curveness={0.2} 
             color="black" 
             strokeWidth={selected === c.id ? 2 : 1}
         />
         <Xarrow 
-            start={c.start}
-            end={c.end} 
+            start={c.participants[0]}
+            end={c.participants[1]} 
             showHead={false} 
             curveness={0.2} 
             color="transparent" 

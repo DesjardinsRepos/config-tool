@@ -1,60 +1,67 @@
 import s from "./RightBar.css"
 import { GlobalStateContext } from "../App.js"
 import { useContext } from "react";
+import JSONPretty from 'react-json-pretty';
+import Service from "../Device/Service"
 
 export default () => {
     const { setSelected, selected, devices, connections } = useContext(GlobalStateContext);
-
-    const getSelectedInformation = () => {
-        let obj
-        
-        if(selected.length === 10) {
-            // check connections
-            obj = connections.find(obj => obj.id === selected)
-
-            // check devices
-            if(!obj)  {
-                obj = devices.find(obj => obj.id === selected)
-                
-                return <ConnectionInfo obj={obj}/>
-            }
-        }
-
-        if(selected.length === 22) {
-            // check services
-            const serviceId = selected.slice(0, -2)
-            obj = devices
-                    .find(dev => dev.services.some(s => s.id === serviceId))
-                    .services.find(s => s.id === serviceId)
-                    
-            return <ServiceInfo obj={obj}/>
-        }
-
-        return obj ? <DeviceInfo obj={obj}/> : "unknown"
-    }
 
     return (
         <div style={s.barWrapper}>
             <div style={s.header}>
                 <img style={s.settingsIcon} src={require("../media/settings.png")}/>
                 <h3 style={s.heading}>Properties</h3>
-                <img style={s.exit} onClick={() => setSelected("")} src={require("../media/exit.png")}/>
+                <img style={s.exit} onClick={() => setSelected(null)} src={require("../media/exit.png")}/>
             </div>
-            {
-                getSelectedInformation()
-            }
+            <div style={{overflow: "auto", height: "500px"}}>
+                {(() => {
+                    if(selected.length === 10) {
+                        // check connections
+                        var obj = connections.find(obj => obj.id === selected)
+
+                        // check devices
+                        if(!obj)  {
+                            obj = devices.find(obj => obj.id === selected)
+                            
+                            return <DeviceInfo obj={obj}/>
+                        }
+                    }
+
+                    if(selected.length === 22) {
+                        // check services
+                        obj = devices
+                                //.find(dev => dev.services.some(s => s.id === serviceId))
+                                .find(dev => dev.id == selected.slice(0, 10))
+                                .services.find(s => s.id === selected.slice(0, 20))
+                                
+                        return <ServiceInfo obj={obj}/>
+                    }
+
+                    return obj ? <ConnectionInfo obj={obj} setSelected={setSelected}/> : "unknown"
+                })()}
+            </div>
         </div>
     )
 }
 
+
 const DeviceInfo = ({obj}) => (
-    <>{JSON.stringify(obj)}</>
+    <>
+        {obj.services?.map(s => (
+            <Service ser={s}></Service>
+        ))}
+        <JSONPretty id="json-pretty" data={obj}></JSONPretty>
+    </>
 )
 
-const ConnectionInfo = ({obj}) => (
-    <>{JSON.stringify(obj)}</>
+const ConnectionInfo = ({obj, setSelected}) => (
+    <>
+        <JSONPretty id="json-pretty" data={obj}></JSONPretty>
+        <button onClick={() => setSelected(`addConnection-${obj.id}`)}>add connection</button>
+    </>
 )
 
 const ServiceInfo = ({obj}) => (
-    <>{JSON.stringify(obj)}</>
+    <JSONPretty id="json-pretty" data={obj}></JSONPretty>
 )

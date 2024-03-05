@@ -64,14 +64,15 @@ const App = () => {
 
   const [connections, setConnections] = useState([
     {
-      type: 2,
-      start: "jlssfoh1n3llm191w4qv-r", 
-      end: "cuj9wefaeasi3v4z4irt-l",
+      participants: [
+        "jlssfoh1n3llm191w4qv-r",
+        "cuj9wefaeasi3v4z4irt-l"
+      ],
       id: "tksp5hz8ks"
     }
   ])
 
-  const [selected, setSelected] = useState("")
+  const [selected, setSelected] = useState(null)
 
   return (
     <ConnectProvider>
@@ -93,7 +94,7 @@ const App = () => {
             
             <Canvas/>
             
-            { selected !== "" && <RightBar/>}
+            { selected !== null && <RightBar/>}
         </div>
 
       </GlobalStateContext.Provider>

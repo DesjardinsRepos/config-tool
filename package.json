@@ -16,6 +16,7 @@
     "react-connect-lines": "^0.0.3",
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.6",
+    "react-json-pretty": "^2.2.0",
     "react-konva": "^18.2.10",
     "react-lineto": "^3.3.0",
     "react-loading-skeleton": "^3.3.1",

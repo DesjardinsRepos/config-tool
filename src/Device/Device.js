@@ -27,7 +27,7 @@ export default ({setPanningEnabled, dev, utils}) => {
             }}
         >
             <div style={selected === dev.id ? {...s.deviceWrapper, ...s.activeShadow} : s.deviceWrapper}>
-                <div style={s.header} onClick={() => setSelected(dev.id)}>
+                <div style={s.header} onMouseDown={() => setSelected(dev.id)}>
                     <img style={s.img}/>
                     <h3 style={s.title}>{dev.name}</h3>
                     <img style={s.settings} src={require("../media/settings.png")}/>
@@ -35,7 +35,7 @@ export default ({setPanningEnabled, dev, utils}) => {
                 <div style={s.servicesWrapper}>
                     {dev.services && dev.services.map(s => (
                         <Service ser={{...s, parentId: dev.id}} key={s.id}/>
-                        ))}
+                    ))}
                 </div>
             </div>
         </Draggable>            

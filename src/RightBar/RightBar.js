@@ -5,7 +5,7 @@ import JSONPretty from 'react-json-pretty';
 import Service from "../Device/Service"
 
 export default () => {
-    const { setSelected, selected, devices, connections } = useContext(GlobalStateContext);
+    const { setSelected, setConnections, selected, devices, connections } = useContext(GlobalStateContext);
 
     return (
         <div style={s.barWrapper}>
@@ -38,7 +38,8 @@ export default () => {
                         return <ServiceInfo obj={obj}/>
                     }
 
-                    return obj ? <ConnectionInfo obj={obj} setSelected={setSelected}/> : "unknown"
+                    return obj ? <ConnectionInfo obj={obj} selected={selected}
+                        setConnections={setConnections} connections={connections}/> : "unknown"
                 })()}
             </div>
         </div>
@@ -55,10 +56,18 @@ const DeviceInfo = ({obj}) => (
     </>
 )
 
-const ConnectionInfo = ({obj, setSelected}) => (
+const ConnectionInfo = ({obj, selected, connections, setConnections}) => (
     <>
         <JSONPretty id="json-pretty" data={obj}></JSONPretty>
-        <button onClick={() => setSelected(`addConnection-${obj.id}`)}>add connection</button>
+        <button onClick={() => {
+            setConnections(connections.map(c => c.id === selected ? {
+                participants: [
+                    ...c.participants,
+                    "cuj9wefaeao2dhowbnzl-l"
+                ],
+                id: c.id
+            } : c))
+        }}>add connection</button>
     </>
 )
 

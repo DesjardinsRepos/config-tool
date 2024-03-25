@@ -5,10 +5,11 @@ import Connections from "../Connections/Connections"
 import {Xwrapper} from 'react-xarrows';
 import { GlobalStateContext } from "../App.js"
 import { useContext } from "react";
+import ConnectionPoint from "../Connections/ConnectionPoint";
 
 export default () => {
     const [panningEnabled, setPanningEnabled] = useState(true)
-    const { devices } = useContext(GlobalStateContext);
+    const { devices, connections } = useContext(GlobalStateContext);
 
 	const debugMarks = []
 	for(let i = 0; i < 11280; i += 500) {
@@ -35,6 +36,9 @@ export default () => {
                         {debugMarks}
                         {devices.map(d => (
                             <Device dev={d} setPanningEnabled={setPanningEnabled} utils={utils} key={d.id}/>
+                        ))}
+                        {connections.map(c => (
+                            c.participants.length > 2 && <ConnectionPoint c={c} setPanningEnabled={setPanningEnabled} utils={utils}/>
                         ))}
                         </TransformComponent>
                         

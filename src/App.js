@@ -73,6 +73,8 @@ const App = () => {
   ])
 
   const [selected, setSelected] = useState(null)
+  const [dragEnabled, setDragEnabled] = useState(true)
+  const [panningEnabled, setPanningEnabled] = useState(true)
 
   return (
     <ConnectProvider>
@@ -86,7 +88,11 @@ const App = () => {
         connections, 
         setConnections,
         selected,
-        setSelected
+        setSelected,
+        dragEnabled,
+        setDragEnabled,
+        panningEnabled,
+        setPanningEnabled
         }}>
         <TopBar/>
         <div style={{display: "flex", height: "calc(100vh - 55px)"}}>
@@ -94,7 +100,7 @@ const App = () => {
             
             <Canvas/>
             
-            { selected !== null && <RightBar/>}
+            { selected !== null && !selected.startsWith("&") && <RightBar/>}
         </div>
 
       </GlobalStateContext.Provider>

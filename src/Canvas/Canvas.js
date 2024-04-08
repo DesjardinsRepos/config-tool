@@ -8,8 +8,7 @@ import { useContext } from "react";
 import ConnectionPoint from "../Connections/ConnectionPoint";
 
 export default () => {
-    const [panningEnabled, setPanningEnabled] = useState(true)
-    const { devices, connections } = useContext(GlobalStateContext);
+    const { devices, connections, panningEnabled } = useContext(GlobalStateContext);
 
 	const debugMarks = []
 	for(let i = 0; i < 11280; i += 500) {
@@ -35,10 +34,10 @@ export default () => {
                             {/*console.log(utils)*/}
                         {debugMarks}
                         {devices.map(d => (
-                            <Device dev={d} setPanningEnabled={setPanningEnabled} utils={utils} key={d.id}/>
+                            <Device dev={d} utils={utils} key={d.id}/>
                         ))}
                         {connections.map(c => (
-                            c.participants.length > 2 && <ConnectionPoint c={c} setPanningEnabled={setPanningEnabled} utils={utils}/>
+                            c.participants.length > 2 && <ConnectionPoint c={c} utils={utils}/>
                         ))}
                         </TransformComponent>
                         

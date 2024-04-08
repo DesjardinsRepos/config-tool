@@ -9,7 +9,10 @@ export default () => {
     const { 
         connections,
         setSelected,
-        selected
+        selected,
+        setPanningEnabled,
+        setConnections,
+        devices
     } = useContext(GlobalStateContext);
 
     useTransformEffect(() => {
@@ -18,22 +21,38 @@ export default () => {
         return () => {};
     });
 
+    const evL = (c, e) => {
+        if(selected.startsWith("&")) {
+            setPanningEnabled(true)
+            setConnections(connections.map(con => c.id === con.id ? {
+                participants: [
+                    ...c.participants,
+                    selected.substring(1, 23)
+                ],
+                lastInteractionPosition: { 
+                    x: e.clientX, 
+                    y: e.clientY,
+                    xDeviceOffset: - devices.length * 300, // solange das sich nicht resettet passt das
+                },
+                id: c.id
+            } : con))
+            setSelected(c.id)
+        }
+    }
+
     return (
         <>
             {connections.map(c => (
                 <div key={c.id}>
-                    {c.participants.length === 2 && <Connect2 c={c} setSelected={setSelected} selected={selected}/>}
-                    {c.participants.length >2 && <ConnectMultiple c={c} setSelected={setSelected} selected={selected}/>}
+                    {c.participants.length === 2 && <Connect2 c={c} evL={evL} setSelected={setSelected} selected={selected}/>}
+                    {c.participants.length >2 && <ConnectMultiple c={c} evL={evL} setSelected={setSelected} selected={selected}/>}
                 </div>
             ))}
         </>
     )        
 }
 
-// add transparent draggable service circle
-// farbliche umrandung
-
-const Connect2 = ({c, setSelected, selected}) => ( 
+const Connect2 = ({c, setSelected, selected, evL}) => ( 
     <>
         <Xarrow 
             start={c.participants[0]}
@@ -54,13 +73,14 @@ const Connect2 = ({c, setSelected, selected}) => (
                 onClick: () => {
                     setSelected(c.id)
                 }, 
-                cursor: "pointer"
+                cursor: "pointer",
+                onMouseUp: e => evL(c, e)
             }}
         />
     </>
 )
 
-const ConnectMultiple = ({c, setSelected, selected}) => ( 
+const ConnectMultiple = ({c, setSelected, selected, evL}) => ( 
     c.participants.map(p => (
         <>
             <Xarrow 
@@ -83,7 +103,8 @@ const ConnectMultiple = ({c, setSelected, selected}) => (
                         setSelected(c.id)
                     }, 
                     cursor: "pointer",
-                    zIndex: -1
+                    zIndex: -1,
+                    onMouseUp: e => evL(c, e)
                 }}
             />
         </>

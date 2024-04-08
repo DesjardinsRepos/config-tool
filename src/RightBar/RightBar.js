@@ -46,7 +46,6 @@ export default () => {
     )
 }
 
-
 const DeviceInfo = ({obj}) => (
     <>
         {obj.services?.map(s => (

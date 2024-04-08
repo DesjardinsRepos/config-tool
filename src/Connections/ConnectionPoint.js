@@ -3,12 +3,36 @@ import {useXarrow} from 'react-xarrows';
 import { useContext } from 'react';
 import { GlobalStateContext } from "../App.js"
 
-export default ({setPanningEnabled, c, utils}) => {
+export default ({c, utils}) => {
+    const { setPanningEnabled } = useContext(GlobalStateContext);
     const update = useXarrow();
 
     const { 
-        setSelected
+        setSelected,
+        selected,
+        devices,
+        setConnections,
+        connections
     } = useContext(GlobalStateContext);
+
+    const evL = (c, e) => {
+        if(selected.startsWith("&")) {
+            setPanningEnabled(true)
+            setConnections(connections.map(con => c.id === con.id ? {
+                participants: [
+                    ...c.participants,
+                    selected.substring(1, 23)
+                ],
+                lastInteractionPosition: { 
+                    x: e.clientX, 
+                    y: e.clientY,
+                    xDeviceOffset: - devices.length * 300, // solange das sich nicht resettet passt das
+                },
+                id: c.id
+            } : con))
+            setSelected(c.id)
+        }
+    }
 
     return (
         <Draggable scale={utils.instance.transformState.scale} 
@@ -20,11 +44,13 @@ export default ({setPanningEnabled, c, utils}) => {
             onDrag={() => update()}
 			
 			defaultPosition={{
-                x: 9100,
-                y: 5600
+                x: (-utils.instance.transformState.positionX + c.lastInteractionPosition.x) / utils.instance.transformState.scale 
+                    - 325,
+                y: (-utils.instance.transformState.positionY + c.lastInteractionPosition.y) / utils.instance.transformState.scale 
+                    - 80
             }}
         >
-            <div id={`${c.id}-wrapper`}
+            <div id={`${c.id}-wrapper`} onMouseUpCapture={e => evL(c, e)}
                 style={{height: "50px", width: "50px", cursor: "grab", position: "absolute", backgroundColor: "red"}}
             >
                 <div id={c.id} style={{margin: "25px"}}/>

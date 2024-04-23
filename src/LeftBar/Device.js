@@ -28,39 +28,20 @@ export default ({el}) => {
 					position={position}
 					onStart={() => setCursor("grabbing")}
 					onStop={() => {
+						// reset UI
 						setPosition({ x: 0, y: -2 });
 						setCursor("grab")
 						
-						const length = 10
-						const devId = (Math.random() + 1).toString(36).substring(2).padEnd(length, '0').substring(0, length)
-
-						const services = el.services?.map(s => ({...s, id: devId + (Math.random() + 1).toString(36).substring(2).padEnd(length, '0').substring(0, length)}))
-
-						console.log("adding device", {
-							id: devId,
-							startPosition: {
-								x: position.x - 300,
-								xDeviceOffset: - devices.length * 300, // solange das sich nicht resettet passt das
-								y: position.y - 55 + positionRef.current.getBoundingClientRect().top
-							},
-							...el,
-							services: services
-						})
+						// create Device
+						const newDevice = require("../general.js").createDevice(el, position, positionRef)
 						
-						setDevices(devices => [ // nur wenn in canvas
+						console.log("adding device", newDevice)
+						setDevices(devices => [ // TODO nur wenn in canvas
 							...devices,
-							{
-								id: devId,
-								startPosition: {
-									x: position.x - 300,
-									xDeviceOffset: - devices.length * 300, // solange das sich nicht resettet passt das
-									y: position.y - 55 + positionRef.current.getBoundingClientRect().top
-								},
-								...el,
-								services: services
-							}
+							newDevice
 						])
 					}}
+
 				    onDrag={(e, ui) => {
 						const { x, y } = ui;
 						setPosition({ x, y });

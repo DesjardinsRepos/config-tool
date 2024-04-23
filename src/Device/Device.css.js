@@ -8,7 +8,8 @@ export default {
         height: "fit-content", 
         borderRadius: "12px", 
         backgroundColor: c.lightBlue, 
-        cursor: "pointer"
+        cursor: "pointer",
+        position: "absolute"
     },
     activeShadow: {
         ...shadows.modC,

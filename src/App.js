@@ -30,9 +30,8 @@ const App = () => {
         }
       ],
       startPosition: {
-        x: 0,
-        y: 0,
-        xDeviceOffset: 0,
+        x: 300,
+        y: 50
       },
       templateDevice: "https://api.goldi-labs.de/devices/9d9fcf04-c291-426f-8b06-fa237918564e"
     },
@@ -54,9 +53,8 @@ const App = () => {
         }
       ],
       startPosition: {
-        x: 100,
-        y: 100,
-        xDeviceOffset: 0,
+        x: 700,
+        y: 100
       },
       templateDevice: "https://api.goldi-labs.de/devices/9d9fcf04-c291-426f-8b06-fa237918564e"
     }
@@ -112,23 +110,19 @@ const App = () => {
     </ConnectProvider>  
   );
 };
+
 const LineDrawingComponent = ({ pos }) => {
-  const lineWidth = 1; // Adjust the thickness of the line here
-  const lineStyle = {
+  return <div style={{
     position: 'absolute',
     zIndex: 9999, // Ensure the line is above other components
     left: pos[0][0],
     top: pos[0][1],
     width: Math.sqrt((pos[1][0] - pos[0][0]) ** 2 + (pos[1][1] - pos[0][1]) ** 2),
-    height: lineWidth, // Set the thickness of the line
+    height: 1, // Set the thickness of the line
     transformOrigin: 'left top',
     transform: `rotate(${Math.atan2(pos[1][1] - pos[0][1], pos[1][0] - pos[0][0])}rad)`,
     backgroundColor: '#555555',
-  };
-
-  return <div style={lineStyle}></div>;
+  }}></div>;
 };
-
-
 
 export default App;

@@ -17,30 +17,14 @@ export default () => {
             {selected}
             <div style={{overflow: "auto", height: "500px"}}>
                 {(() => {
-                    if(selected.length === 10) {
-                        // check connections
-                        var obj = connections.find(obj => obj.id === selected)
+                    const [type, obj] = require("../general.js").findSelected(selected, devices, connections)
+                    
+                    if(type === "device") return <DeviceInfo obj={obj}/>
 
-                        // check devices
-                        if(!obj)  {
-                            obj = devices.find(obj => obj.id === selected)
-                            
-                            return <DeviceInfo obj={obj}/>
-                        }
-                    }
+                    if(type === "connection") return <ConnectionInfo obj={obj} selected={selected}
+                        setConnections={setConnections} connections={connections}/>
 
-                    if(selected.length === 22) {
-                        // check services
-                        obj = devices
-                                //.find(dev => dev.services.some(s => s.id === serviceId))
-                                .find(dev => dev.id == selected.slice(0, 10))
-                                .services.find(s => s.id === selected.slice(0, 20))
-                                
-                        return <ServiceInfo obj={obj}/>
-                    }
-
-                    return obj ? <ConnectionInfo obj={obj} selected={selected}
-                        setConnections={setConnections} connections={connections}/> : "unknown"
+                    return "unknown"
                 })()}
             </div>
         </div>
@@ -76,8 +60,4 @@ const ConnectionInfo = ({obj, selected, connections, setConnections}) => (
             } : c))
         }}>add connection</button>
     </>
-)
-
-const ServiceInfo = ({obj}) => (
-    <JSONPretty id="json-pretty" data={obj}></JSONPretty>
 )

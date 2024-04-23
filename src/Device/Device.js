@@ -23,11 +23,10 @@ export default ({dev, utils}) => {
             onDrag={() => update()}
             disabled={!dragEnabled}
 			bounds="parent"
-			defaultPosition={{
-                x: (-utils.instance.transformState.positionX + dev.startPosition.x) / utils.instance.transformState.scale 
-                    + dev.startPosition.xDeviceOffset,
-                y: (-utils.instance.transformState.positionY + dev.startPosition.y) / utils.instance.transformState.scale
-            }}
+			defaultPosition={require("../general.js").calculateInitialDevicePosition(
+                utils.instance.transformState, 
+                dev.startPosition
+            )}
         >
             <div style={selected === dev.id ? {...s.deviceWrapper, ...s.activeShadow} : s.deviceWrapper}>
                 <div className="drag-header" style={s.header}>
@@ -44,6 +43,3 @@ export default ({dev, utils}) => {
         </Draggable>            
     )
 }
-
-// klein: zu niedrig, zu rechts
-// groß: zu hoch, zu links

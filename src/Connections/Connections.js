@@ -12,7 +12,6 @@ export default () => {
         selected,
         setPanningEnabled,
         setConnections,
-        devices,
         showConnections
     } = useContext(GlobalStateContext);
 
@@ -22,22 +21,20 @@ export default () => {
         return () => {};
     });
 
-    const evL = (c, e) => {
+    const onLineDrop = (c, e) => {
         if(selected?.startsWith("&")) {
             setPanningEnabled(true)
-            setConnections(connections.map(con => c.id === con.id ? {
-                participants: [
-                    ...c.participants,
-                    selected.substring(1, 23)
-                ],
-                lastInteractionPosition: { 
-                    x: e.clientX, 
-                    y: e.clientY,
-                    xDeviceOffset: - devices.length * 300, // solange das sich nicht resettet passt das
-                },
-                id: c.id
-            } : con))
-            setSelected(c.id)
+
+            require("../general").addParticipantToConnection(
+                setSelected,
+                setConnections,
+                c,                              // initial connection
+                selected.substring(1, 23),      // connectionToAddID
+                {                               // last interacted position
+                    x: e.clientX,
+                    y: e.clientY
+                }
+            )
         }
     }
 
@@ -45,15 +42,15 @@ export default () => {
         <>
             {showConnections && connections.map(c => (
                 <div key={c.id}>
-                    {c.participants.length === 2 && <Connect2 c={c} evL={evL} setSelected={setSelected} selected={selected}/>}
-                    {c.participants.length >2 && <ConnectMultiple c={c} evL={evL} setSelected={setSelected} selected={selected}/>}
+                    {c.participants.length === 2 && <Connect2 c={c} onLineDrop={onLineDrop} setSelected={setSelected} selected={selected}/>}
+                    {c.participants.length >2 && <ConnectMultiple c={c} onLineDrop={onLineDrop} setSelected={setSelected} selected={selected}/>}
                 </div>
             ))}
         </>
     )        
 }
 
-const Connect2 = ({c, setSelected, selected, evL}) => ( 
+const Connect2 = ({c, setSelected, selected, onLineDrop}) => ( 
     <>
         <Xarrow 
             start={c.participants[0]}
@@ -75,13 +72,13 @@ const Connect2 = ({c, setSelected, selected, evL}) => (
                     setSelected(c.id)
                 }, 
                 cursor: "pointer",
-                onMouseUp: e => evL(c, e)
+                onMouseUp: e => onLineDrop(c, e)
             }}
         />
     </>
 )
 
-const ConnectMultiple = ({c, setSelected, selected, evL}) => ( 
+const ConnectMultiple = ({c, setSelected, selected, onLineDrop}) => ( 
     c.participants.map(p => (
         <>
             <Xarrow 
@@ -108,7 +105,7 @@ const ConnectMultiple = ({c, setSelected, selected, evL}) => (
                     }, 
                     cursor: "pointer",
                     zIndex: -1,
-                    onMouseUp: e => evL(c, e)
+                    onMouseUp: e => onLineDrop(c, e)
                 }}
             />
         </>

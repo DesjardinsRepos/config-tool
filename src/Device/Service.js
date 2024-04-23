@@ -47,37 +47,35 @@ const Connection = ({id}) => {
                     [e.clientX, e.clientY]
                 ])
 
-                const trackMouse = e => {
+                const mouseMove = e => {
                     setConnectPos(connectPos => [
                         connectPos[0],
                         [e.clientX, e.clientY]
                     ])
                 }
-                const evListener = () => {
+                const mouseMoveEnded = () => {
                     setPanningEnabled(true)
                     setSelected(selected => selected.startsWith("&") ? null : selected)
-                    document.removeEventListener("mouseup", evListener)
-                    document.removeEventListener("mousemove", trackMouse)
+                    document.removeEventListener("mouseup", mouseMoveEnded)
+                    document.removeEventListener("mousemove", mouseMove)
                 }
-                document.addEventListener("mouseup", evListener)
-                document.addEventListener("mousemove", trackMouse)
+                document.addEventListener("mouseup", mouseMoveEnded)
+                document.addEventListener("mousemove", mouseMove)
             }}
 
             onMouseUp={()=> {
-                if(selected?.startsWith("&")) {
-                    const length = 10
-                    const connectionHash = (Math.random() + 1).toString(36).substring(2).padEnd(length, '0').substring(0, length)
+                if(selected?.startsWith("&")) { // create connection
                     setPanningEnabled(true)
+
+                    const [connection, connectionHash] = require("../general.js").createConnection(
+                        id,
+                        selected.substring(1, 23)
+                    )
+
                     setConnections(connections => [
-                        ...connections,
-                        {
-                            participants: [
-                            id,
-                            selected.substring(1, 23)
-                            ],
-                            id: connectionHash
-                        }
+                        ... connections, connection
                     ])
+
                     setSelected(connectionHash)
                 }
             }}

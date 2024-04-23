@@ -14,6 +14,7 @@ export default () => {
                 <h3 style={s.heading}>Properties</h3>
                 <img style={s.exit} onClick={() => setSelected(null)} src={require("../media/exit.png")}/>
             </div>
+            {selected}
             <div style={{overflow: "auto", height: "500px"}}>
                 {(() => {
                     if(selected.length === 10) {
@@ -58,6 +59,13 @@ const DeviceInfo = ({obj}) => (
 const ConnectionInfo = ({obj, selected, connections, setConnections}) => (
     <>
         <JSONPretty id="json-pretty" data={obj}></JSONPretty>
+        <h3>Teilnehmer</h3>
+        {obj.participants.map(p => {
+            const device = p.substring(0,10)
+            const service = p.substring(10,20)
+            const direction = p.substring(21, 22)
+            return <p>{device},{direction}</p>
+        })}
         <button onClick={() => {
             setConnections(connections.map(c => c.id === selected ? {
                 participants: [

@@ -18,7 +18,7 @@ export default ({dev, utils}) => {
     return (
         <Draggable scale={utils.instance.transformState.scale} 
             handle=".drag-header"
-            onStart={() => setPanningEnabled(false)} 
+            onStart={() => {setPanningEnabled(false); setSelected(dev.id)}} 
             onStop={() => setPanningEnabled(true)}
             onDrag={() => update()}
             disabled={!dragEnabled}
@@ -30,7 +30,7 @@ export default ({dev, utils}) => {
             }}
         >
             <div style={selected === dev.id ? {...s.deviceWrapper, ...s.activeShadow} : s.deviceWrapper}>
-                <div className="drag-header" style={s.header} onMouseDown={() => setSelected(dev.id)}>
+                <div className="drag-header" style={s.header}>
                     <img style={s.img}/>
                     <h3 style={s.title}>{dev.name}</h3>
                     <img style={s.settings} src={require("../media/settings.png")}/>

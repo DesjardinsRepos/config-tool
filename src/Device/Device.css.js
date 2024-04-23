@@ -17,7 +17,8 @@ export default {
     header: {
         display: "flex",
         margin: "-10px 0 -3px 0",
-        padding: "10px 0"
+        padding: "10px 0",
+        cursor: "grab"
     },
     img: {
         width: "30px", 

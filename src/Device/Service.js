@@ -33,7 +33,7 @@ const Connection = ({id}) => {
         selected,
         setPanningEnabled,
         setConnections,
-        connections
+        setConnectPos
     } = useContext(GlobalStateContext);
 
     return (
@@ -42,29 +42,44 @@ const Connection = ({id}) => {
             onMouseDown={e=> {
                 setSelected(`&${id}:${e.pageX}:${e.pageY}`)
                 setPanningEnabled(false)
+                setConnectPos([
+                    [e.clientX, e.clientY],
+                    [e.clientX, e.clientY]
+                ])
 
+                const trackMouse = e => {
+                    setConnectPos(connectPos => [
+                        connectPos[0],
+                        [e.clientX, e.clientY]
+                    ])
+                }
                 const evListener = () => {
                     setPanningEnabled(true)
+                    setSelected(selected => selected.startsWith("&") ? null : selected)
                     document.removeEventListener("mouseup", evListener)
+                    document.removeEventListener("mousemove", trackMouse)
                 }
                 document.addEventListener("mouseup", evListener)
+                document.addEventListener("mousemove", trackMouse)
             }}
 
             onMouseUp={()=> {
-                const length = 10
-                const connectionHash = (Math.random() + 1).toString(36).substring(2).padEnd(length, '0').substring(0, length)
-                setPanningEnabled(true)
-                setConnections(connections => [
-                    ...connections,
-                    {
-                        participants: [
-                          id,
-                          selected.substring(1, 23)
-                        ],
-                        id: connectionHash
-                      }
-                ])
-                setSelected(connectionHash)
+                if(selected?.startsWith("&")) {
+                    const length = 10
+                    const connectionHash = (Math.random() + 1).toString(36).substring(2).padEnd(length, '0').substring(0, length)
+                    setPanningEnabled(true)
+                    setConnections(connections => [
+                        ...connections,
+                        {
+                            participants: [
+                            id,
+                            selected.substring(1, 23)
+                            ],
+                            id: connectionHash
+                        }
+                    ])
+                    setSelected(connectionHash)
+                }
             }}
         >
             <svg id={id} style={id.charAt(21) === "l" ? s.leftConnection : s.rightConnection} 

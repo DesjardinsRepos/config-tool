@@ -51,7 +51,7 @@ export default ({c, utils}) => {
             }}
         >
             <div id={`${c.id}-wrapper`} onMouseUpCapture={e => evL(c, e)}
-                style={{height: "50px", width: "50px", cursor: "grab", position: "absolute", backgroundColor: "red"}}
+                style={{height: "50px", width: "50px", cursor: "grab", position: "absolute"}}
             >
                 <div id={c.id} style={{margin: "25px"}}/>
             </div>

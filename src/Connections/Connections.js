@@ -12,7 +12,8 @@ export default () => {
         selected,
         setPanningEnabled,
         setConnections,
-        devices
+        devices,
+        showConnections
     } = useContext(GlobalStateContext);
 
     useTransformEffect(() => {
@@ -22,7 +23,7 @@ export default () => {
     });
 
     const evL = (c, e) => {
-        if(selected.startsWith("&")) {
+        if(selected?.startsWith("&")) {
             setPanningEnabled(true)
             setConnections(connections.map(con => c.id === con.id ? {
                 participants: [
@@ -42,7 +43,7 @@ export default () => {
 
     return (
         <>
-            {connections.map(c => (
+            {showConnections && connections.map(c => (
                 <div key={c.id}>
                     {c.participants.length === 2 && <Connect2 c={c} evL={evL} setSelected={setSelected} selected={selected}/>}
                     {c.participants.length >2 && <ConnectMultiple c={c} evL={evL} setSelected={setSelected} selected={selected}/>}
@@ -58,17 +59,17 @@ const Connect2 = ({c, setSelected, selected, evL}) => (
             start={c.participants[0]}
             end={c.participants[1]} 
             showHead={false} 
-            curveness={0.2} 
-            color="black" 
-            strokeWidth={selected === c.id ? 2 : 1}
+            color={selected === c.id ? "black" : "grey"}
+            strokeWidth={selected === c.id ? 2 : 1.1}
+            curveness={0} 
         />
         <Xarrow 
             start={c.participants[0]}
             end={c.participants[1]} 
             showHead={false} 
-            curveness={0.2} 
             color="transparent" 
             strokeWidth={30}
+            curveness={0} 
             passProps= {{
                 onClick: () => {
                     setSelected(c.id)
@@ -88,15 +89,18 @@ const ConnectMultiple = ({c, setSelected, selected, evL}) => (
                 end={c.id} 
                 showHead={false} 
                 curveness={0} 
-                color="black" 
-                strokeWidth={selected === c.id ? 2 : 1}
+                color={selected === c.id ? "black" : "grey"} 
+                strokeWidth={selected === c.id ? 2 : 1.1}
+                passProps={{
+                    pointerEvents: "none"
+                }}
             />
             <Xarrow 
                 start={p}
                 end={`${c.id}-wrapper`} 
                 showHead={false} 
                 curveness={0} 
-                color="#33333333" 
+                color="#33333300" 
                 strokeWidth={30}
                 passProps= {{
                     onClick: () => {

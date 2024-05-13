@@ -114,15 +114,15 @@ const App = () => {
 const LineDrawingComponent = ({ pos }) => {
   return <div style={{
     position: 'absolute',
-    zIndex: 9999, // Ensure the line is above other components
+    zIndex: 9999,
     left: pos[0][0],
     top: pos[0][1],
     width: Math.sqrt((pos[1][0] - pos[0][0]) ** 2 + (pos[1][1] - pos[0][1]) ** 2),
-    height: 1, // Set the thickness of the line
+    height: 1, // thickness
     transformOrigin: 'left top',
     transform: `rotate(${Math.atan2(pos[1][1] - pos[0][1], pos[1][0] - pos[0][0])}rad)`,
     backgroundColor: '#555555',
-  }}></div>;
+  }}/>;
 };
 
 export default App;

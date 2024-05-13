@@ -2,16 +2,16 @@ import {colors as c, shadows} from "../styles"
 
 export default {
     barWrapper: {
-        padding: "10px", 
         backgroundColor: c.lightBlue, 
         width: "350px", 
         position: "fixed", 
         right: 0, 
-        height: "100%", 
+        height: "100%",
         ...shadows.a
     },
     header: {
-        display: "flex"
+        display: "flex",
+        padding: "5px 0"
     },
     settingsIcon: {
         width: "20px", 

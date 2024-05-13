@@ -14,7 +14,7 @@ export const findSelected = (selected, devices, connections) => {
         }
     }
 
-    if(selected.length === 22) {
+    if(selected.length === 22 || selected.length === 20) {
         // check services
         obj = devices
             //.find(dev => dev.services.some(s => s.id === serviceId))
@@ -76,13 +76,30 @@ export const calculateInitialConnectionPointPosition = (canvas, connectionPoint)
 
 export const addParticipantToConnection = (setSelected, setConnections, initialConnection, newParticipantID, lastInteractionPosition) => {
     setConnections(connections => connections.map(connection => initialConnection.id === connection.id ? {
+        ...initialConnection,
         participants: [
             ...initialConnection.participants,
             newParticipantID
         ],
-        lastInteractionPosition,
-        id: initialConnection.id
+        lastInteractionPosition
     } : connection))
 
     setSelected(initialConnection.id)
+}
+
+export const deleteParticipant = (initialConnection, participant, setConnections) => {
+    setConnections(connections => connections.map(connection => initialConnection.id === connection.id ? {
+        ...initialConnection,
+        participants: initialConnection.participants.filter(p => p !== participant),
+    } : connection))
+}
+
+export const changeParticipantDirection = (initialConnection, participant, setConnections) => {
+    setConnections(connections => connections.map(connection => initialConnection.id === connection.id ? {
+        ...initialConnection,
+        participants: initialConnection.participants.map(p => p === participant ? 
+            `${p.substring(0, 21)}${p.substring(21, 22) === "l" ? "r" : "l"}` 
+            : p
+        ),
+    } : connection))
 }

@@ -47,6 +47,15 @@ export default ({c, utils}) => {
             <div id={`${c.id}-wrapper`} onMouseUpCapture={e => onLineDrop(c, e)}
                 style={{height: "50px", width: "50px", cursor: "grab", position: "absolute"}}
             >
+                {c.id === selected ? 
+                    <svg height={6} width={6} style={{margin: "22px", position: "absolute"}}>
+                        <circle r={3} cx={3} cy={3} fill={c.id === selected ? "black" : "grey"}/>
+                    </svg>
+                :
+                    <svg height={4} width={4} style={{margin: "23px", position: "absolute"}}>
+                        <circle r={2} cx={2} cy={2} fill="grey"/>
+                    </svg>
+                }
                 <div id={c.id} style={{margin: "25px"}}/>
             </div>
         </Draggable>            

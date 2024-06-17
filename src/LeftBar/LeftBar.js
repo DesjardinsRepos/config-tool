@@ -48,6 +48,7 @@ export default () => {
                             loadCount = loadCount + 1
                             if(!loadCount) setApiLoaded()
                         })
+                        .catch(e => console.log(e))
                     })
 
                     loadCount = loadCount + 1

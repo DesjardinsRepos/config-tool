@@ -4,12 +4,58 @@ import LeftBar from './LeftBar/LeftBar';
 import TopBar from './TopBar/TopBar';
 import RightBar from './RightBar/RightBar';
 import Canvas from './Canvas/Canvas';
+import { APIClient } from '@cross-lab-project/api-client';
+import password from './password.js'
+
+const apiClient = new APIClient('https://api.goldi-labs.de');
 
 export const GlobalStateContext = React.createContext();
 
-const App = () => {
+const App = ({input, callback}) => {
   const [showConnections, setShowConnections] = useState(true);
   const [mode, setMode] = useState("pinplanner");
+
+  useEffect(() => {(async () => {
+      await apiClient.login("fabe1847", password)
+    
+      const parseDevices = (async () => await Promise.all(
+        input.roles
+        .map(r => ({
+          id: require("./general").GENERATE_UID_10(),
+          name: r.name, 
+          templateDevice: r.template_device,
+          startPosition: r['x-esc-position']
+        }))
+        .map(async device => {
+          const deviceData = await apiClient.getDevice(device.templateDevice)
+          const devId = require("./general.js").GENERATE_UID_10()
+          
+          return {
+            ...device,
+            id: devId,
+            deviceData,
+            services: deviceData.services.map(s => {
+              return {
+                ...s,
+                id: devId + require("./general.js").GENERATE_UID_10()
+              }
+            })
+          }
+        })
+      )
+      .then(updatedDevices => {
+        console.log("updatedDevices", updatedDevices)
+        setDevices(d => [...d, ...updatedDevices])
+      }))()
+
+      const parseConnections = () => {
+        input.serviceConfigurations.map(sc => {
+          // wieso hier namen. Eindeutigkeit????
+        })
+      }
+  })()}, [])
+
+  
 
   const [devices, setDevices] = useState([
     {
@@ -41,15 +87,18 @@ const App = () => {
       services: [
         {
           id: "cuj9wefaeao2dhowbnzl",
-          serviceId: "Electrical Connection Sensor"
+          serviceId: "Electrical Connection Sensor",
+          serviceDirection: "consumer"
         },
         {
           id: "cuj9wefaea23opa90ipw",
-          serviceId: "Electrical Connection Sensor"
+          serviceId: "Electrical Connection Sensor",
+          serviceDirection: "prosumer"
         },
         {
           id: "cuj9wefaeasi3v4z4irt",
-          serviceId: "Electrical Connection Sensor"
+          serviceId: "Electrical Connection Sensor",
+          serviceDirection: "producer"
         }
       ],
       startPosition: {

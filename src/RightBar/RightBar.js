@@ -76,8 +76,8 @@ export default () => {
 
 const DeviceInfo = ({obj}) => (
     <>
-        {obj.services?.map(s => (
-            <Service ser={s}></Service>
+        {obj.services?.map((s, k) => (
+            <Service ser={s} key={k}></Service>
         ))}
         <JSONPretty id="json-pretty" data={obj}></JSONPretty>
     </>

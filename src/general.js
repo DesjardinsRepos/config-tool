@@ -1,5 +1,5 @@
 const UID_LENGTH = 10
-const GENERATE_UID_10 = () => (Math.random() + 1).toString(36).substring(2).padEnd(UID_LENGTH, '0').substring(0, UID_LENGTH)
+export const GENERATE_UID_10 = () => (Math.random() + 1).toString(36).substring(2).padEnd(UID_LENGTH, '0').substring(0, UID_LENGTH)
 
 export const findSelected = (selected, devices, connections) => {
     if(selected.length === 10) {
@@ -69,8 +69,8 @@ export const calculateInitialConnectionPointPosition = (canvas, connectionPoint)
     // topbar height: 55, leftbar width: 300, connectionPoint: 50x50
 
     return {
-        x: (-canvas.positionX + connectionPoint.x) / canvas.scale - 300 - 25,
-        y: (-canvas.positionY + connectionPoint.y) / canvas.scale - 55 - 25
+        x: (-canvas.positionX + connectionPoint.x - 300) / canvas.scale - 25,
+        y: (-canvas.positionY + connectionPoint.y- 55) / canvas.scale - 25 
     }
 }
 

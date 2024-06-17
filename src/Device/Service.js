@@ -10,16 +10,16 @@ export default ({ser}) => {
     return (
         <div style={open ? {...s.serviceWrapper, ...s.serviceOpen} : {...s.serviceWrapper}}>
             <div style={s.header}>
-                <Connection id={`${ser.id}-l`}/>
+                <Connection id={`${ser.id}-l`} ser={ser}/>
                 <img style={s.img}/>
                 <p onClick={() => setOpen(!open)} style={s.text}>{ser.serviceId}</p>
                 <svg style={open ? {...s.dropButton} : {...s.dropButton, ...s.rotated}} onClick={() => setOpen(!open)} width="32px" height="32px" viewBox="0 0 24 24" fill={c.darkSteel}><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <rect x="0" fill="none" width="24" height="24"></rect> <g> <path d="M7 10l5 5 5-5"></path> </g> </g></svg>
-                <Connection id={`${ser.id}-r`}/>
+                <Connection id={`${ser.id}-r`} ser={ser}/>
             </div>
             {open && 
                 <div style={s.pinWrapper}>
-                    {[1,1].map(() => (
-                        <Pin>D0</Pin>
+                    {[1,1].map((v, k) => (
+                        <Pin key={k}>D{k}</Pin>
                     ))}
                 </div>
             }
@@ -27,7 +27,7 @@ export default ({ser}) => {
     )
 }
 
-const Connection = ({id}) => {
+const Connection = ({id, ser}) => {
     const { 
         setSelected,
         selected,
@@ -80,9 +80,31 @@ const Connection = ({id}) => {
                 }
             }}
         >
-            <svg id={id} style={id.charAt(21) === "l" ? s.leftConnection : s.rightConnection} 
-                height="12" width="12"><circle cx="6" cy="6" r="5" stroke="black" strokeWidth="1" 
-                fill={id === selected ? c.darkSteel : c.steel}/></svg>     
+        
+            <div style={{position: "relative", display: "flex"}}>
+                {(!ser.serviceDirection || ser.serviceDirection === "prosumer") && <svg style={{margin: "auto 11px auto 11px"}} 
+                    height="12" width="12"><circle cx="6" cy="6" r="5" stroke="black" strokeWidth="1" 
+                    fill={id === selected ? c.darkSteel : c.steel}/>  
+                </svg>} 
+
+                {(ser.serviceDirection === "producer") && <svg style={{margin: "auto 11px auto 11px"}} height="12" width="13.44">
+                <polygon points="2.8,1 11.8,5.75 2.8,11" fill={id === selected ? c.darkSteel : c.steel} stroke="black" strokeWidth="1" />
+                </svg>}
+
+                {(ser.serviceDirection === "consumer") && <svg style={{margin: "auto 11px auto 11px"}} height="12" width="13.44">
+                <polygon points="3.8,1 12.8,5.75 3.8,11" fill={id === selected ? c.darkSteel : c.steel} stroke="black" strokeWidth="1" transform="rotate(180 6.6 6)" />
+                </svg>}
+
+                <div style={{ 
+                    position: 'absolute', 
+                    width: '0', 
+                    height: '0', 
+                    top: '50%', 
+                    left: '50%', 
+                    transform: 'translate(-50%, -50%)'
+                }} id={id}/>
+            </div>
+                
         </div>
     )
 }

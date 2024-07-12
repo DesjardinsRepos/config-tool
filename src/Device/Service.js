@@ -10,11 +10,11 @@ export default ({ser}) => {
     return (
         <div style={open ? {...s.serviceWrapper, ...s.serviceOpen} : {...s.serviceWrapper}}>
             <div style={s.header}>
-                <Connection id={`${ser.id}-l`} ser={ser}/>
+                <Connection direction={"left"} ser={ser}/>
                 <img style={s.img}/>
                 <p onClick={() => setOpen(!open)} style={s.text}>{ser.serviceId}</p>
                 <svg style={open ? {...s.dropButton} : {...s.dropButton, ...s.rotated}} onClick={() => setOpen(!open)} width="32px" height="32px" viewBox="0 0 24 24" fill={c.darkSteel}><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <rect x="0" fill="none" width="24" height="24"></rect> <g> <path d="M7 10l5 5 5-5"></path> </g> </g></svg>
-                <Connection id={`${ser.id}-r`} ser={ser}/>
+                <Connection direction={"right"} ser={ser}/>
             </div>
             {open && 
                 <div style={s.pinWrapper}>
@@ -27,7 +27,7 @@ export default ({ser}) => {
     )
 }
 
-const Connection = ({id, ser}) => {
+const Connection = ({ser, direction}) => {
     const { 
         setSelected,
         selected,
@@ -36,11 +36,17 @@ const Connection = ({id, ser}) => {
         setConnectPos
     } = useContext(GlobalStateContext);
 
+    const elementId = ser.id + "-" + direction.substring(0,1)
+
     return (
         <div style={{display: "flex"}} 
 
             onMouseDown={e=> {
-                setSelected(`&${id}:${e.pageX}:${e.pageY}`)
+                setSelected({
+                    id: ser.id,
+                    currentlyLineDrawing: true,
+                    direction: direction
+                })
                 setPanningEnabled(false)
                 setConnectPos([
                     [e.clientX, e.clientY],
@@ -55,7 +61,7 @@ const Connection = ({id, ser}) => {
                 }
                 const mouseMoveEnded = () => {
                     setPanningEnabled(true)
-                    setSelected(selected => selected.startsWith("&") ? null : selected)
+                    setSelected(selected => selected.currentlyLineDrawing ? null : selected)
                     document.removeEventListener("mouseup", mouseMoveEnded)
                     document.removeEventListener("mousemove", mouseMove)
                 }
@@ -64,19 +70,22 @@ const Connection = ({id, ser}) => {
             }}
 
             onMouseUp={()=> {
-                if(selected?.startsWith("&")) { // create connection
+                if(selected?.currentlyLineDrawing) { // create connection
                     setPanningEnabled(true)
 
                     const [connection, connectionHash] = require("../general.js").createConnection(
-                        id,
-                        selected.substring(1, 23)
+                        {
+                            id: ser.id,
+                            direction: direction
+                        },
+                        selected
                     )
 
                     setConnections(connections => [
                         ... connections, connection
                     ])
 
-                    setSelected(connectionHash)
+                    setSelected({id: connectionHash})
                 }
             }}
         >
@@ -84,15 +93,15 @@ const Connection = ({id, ser}) => {
             <div style={{position: "relative", display: "flex"}}>
                 {(!ser.serviceDirection || ser.serviceDirection === "prosumer") && <svg style={{margin: "auto 11px auto 11px"}} 
                     height="12" width="12"><circle cx="6" cy="6" r="5" stroke="black" strokeWidth="1" 
-                    fill={id === selected ? c.darkSteel : c.steel}/>  
+                    fill={ser.id === selected.id ? c.darkSteel : c.steel}/>  
                 </svg>} 
 
                 {(ser.serviceDirection === "producer") && <svg style={{margin: "auto 11px auto 11px"}} height="12" width="13.44">
-                <polygon points="2.8,1 11.8,5.75 2.8,11" fill={id === selected ? c.darkSteel : c.steel} stroke="black" strokeWidth="1" />
+                <polygon points="2.8,1 11.8,5.75 2.8,11" fill={ser.id === selected.id ? c.darkSteel : c.steel} stroke="black" strokeWidth="1" />
                 </svg>}
 
                 {(ser.serviceDirection === "consumer") && <svg style={{margin: "auto 11px auto 11px"}} height="12" width="13.44">
-                <polygon points="3.8,1 12.8,5.75 3.8,11" fill={id === selected ? c.darkSteel : c.steel} stroke="black" strokeWidth="1" transform="rotate(180 6.6 6)" />
+                <polygon points="3.8,1 12.8,5.75 3.8,11" fill={ser.id === selected.id ? c.darkSteel : c.steel} stroke="black" strokeWidth="1" transform="rotate(180 6.6 6)" />
                 </svg>}
 
                 <div style={{ 
@@ -102,9 +111,8 @@ const Connection = ({id, ser}) => {
                     top: '50%', 
                     left: '50%', 
                     transform: 'translate(-50%, -50%)'
-                }} id={id}/>
-            </div>
-                
+                }} id={elementId}/>
+            </div>    
         </div>
     )
 }

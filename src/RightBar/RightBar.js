@@ -15,7 +15,7 @@ export default () => {
             <div style={s.header}>
                 <img style={s.settingsIcon} src={require("../media/settings.png")}/>
                 <h3 style={s.heading}>Properties</h3>
-                <img style={s.exit} onClick={() => setSelected(null)} src={require("../media/exit.png")}/>
+                <img style={s.exit} onClick={() => setSelected({id: null})} src={require("../media/exit.png")}/>
             </div>
             {(() => {
                 const [type, obj] = require("../general.js").findSelected(selected, devices, connections)
@@ -29,14 +29,13 @@ export default () => {
                                 <div style={{borderRadius: 5, padding: "10px"}}>
                                     <h3>PARTICIPANTS</h3>
                                     {obj.participants.map(p => {
-                                        const service = findSelected(p, devices, connections)[1]
-                                        const device = findSelected(p.substring(0, 10), devices, connections)[1]
-                                        const direction = p.substring(21, 22) === "l" ? "LEFT" : "RIGHT"
+                                        const [type, { parent, service}] = require("../general.js").findSelected(p, devices, connections)
+                                        const direction = p.direction.toUpperCase()
 
                                         return <div style={{backgroundColor: c.whiteSteel, borderRadius: 8, margin: "10px 0", padding: "5px 10px", display: "flex", justifyContent: "space-between"}}>
                                             <div>
                                                 <p style={{fontSize: 18, margin: "0 auto"}}>{`${service.serviceId}`}</p>
-                                                <p style={{fontSize: 12, margin: "0 auto"}}>{device.name}</p>
+                                                <p style={{fontSize: 12, margin: "0 auto"}}>{parent.name}</p>
                                             </div>
                                             <div onClick={() => require("../general").changeParticipantDirection(obj, p, setConnections)} 
                                                 style={{backgroundColor: c.lightBlue, height: 30, width: 60, margin: "auto 10px auto auto", borderRadius: 8, display: "flex", justifyContent: "space-between", cursor: "pointer", }}>

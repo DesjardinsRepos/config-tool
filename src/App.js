@@ -112,14 +112,20 @@ const App = ({input, callback}) => {
   const [connections, setConnections] = useState([
     {
       participants: [
-        "jlssfoh1n3llm191w4qv-r",
-        "cuj9wefaeasi3v4z4irt-l"
+        {
+          id: "jlssfoh1n3llm191w4qv",
+          direction: "right"
+        },
+        {
+          id: "cuj9wefaeasi3v4z4irt",
+          direction: "left"
+        }
       ],
       id: "tksp5hz8ks"
     }
   ])
 
-  const [selected, setSelected] = useState(null)
+  const [selected, setSelected] = useState({})
   const [dragEnabled, setDragEnabled] = useState(true)
   const [panningEnabled, setPanningEnabled] = useState(true)
   const [connectPos, setConnectPos] = useState([[0,0],[0,0]])
@@ -150,9 +156,9 @@ const App = ({input, callback}) => {
             
             <Canvas/>
 
-            { selected?.startsWith("&") && <LineDrawingComponent pos={connectPos} />}
+            { selected.currentlyLineDrawing && <LineDrawingComponent pos={connectPos} />}
 
-            { selected !== null && !selected.startsWith("&") && <RightBar/>}
+            { selected.id && !selected.currentlyLineDrawing && <RightBar/>}
         </div>
 
       </GlobalStateContext.Provider>

@@ -2,29 +2,24 @@ const UID_LENGTH = 10
 export const GENERATE_UID_10 = () => (Math.random() + 1).toString(36).substring(2).padEnd(UID_LENGTH, '0').substring(0, UID_LENGTH)
 
 export const findSelected = (selected, devices, connections) => {
-    if(selected.length === 10) {
-        // check connections
-        var obj = connections.find(obj => obj.id === selected)
+    // check connections
+    let obj = connections.find(obj => obj.id === selected?.id)
+    if(obj) return ["connection", obj]
 
-        // check devices
-        if(!obj)  {
-            obj = devices.find(obj => obj.id === selected)
-            
-            return ["device", obj]
-        }
-    }
+    // check devices
+    obj = devices.find(obj => obj.id === selected?.id)
+    if(obj) return ["device", obj]
 
-    if(selected.length === 22 || selected.length === 20) {
-        // check services
-        obj = devices
-            //.find(dev => dev.services.some(s => s.id === serviceId))
-            .find(dev => dev.id === selected.slice(0, 10))
-            .services.find(s => s.id === selected.slice(0, 20))
-                
-        return ["service", obj]
-    }
+    // check services
+    obj = devices.find(dev => dev.services.some(s => s.id === selected?.id))
+    if(obj) return ["service", {
+        parent: obj,
+        service: obj.services.find(s => s.id === selected?.id)
+    }]
 
-    return obj ? ["connection", obj] : ["unknown", "unknown"]
+    // this wont find & and one-sided connections
+
+    return ["unknown", undefined]
 }
 
 export const createDevice = (staticDevice, position, positionRef) => {
@@ -74,17 +69,21 @@ export const calculateInitialConnectionPointPosition = (canvas, connectionPoint)
     }
 }
 
-export const addParticipantToConnection = (setSelected, setConnections, initialConnection, newParticipantID, lastInteractionPosition) => {
+export const addParticipantToConnection = (setSelected, setConnections, initialConnection, newParticipant, lastInteractionPosition) => {
+    
     setConnections(connections => connections.map(connection => initialConnection.id === connection.id ? {
         ...initialConnection,
         participants: [
             ...initialConnection.participants,
-            newParticipantID
+            {
+                id: newParticipant.id,
+                direction: newParticipant.direction
+            }
         ],
         lastInteractionPosition
     } : connection))
 
-    setSelected(initialConnection.id)
+    setSelected({id: initialConnection.id})
 }
 
 export const deleteParticipant = (initialConnection, participant, setConnections) => {
@@ -97,8 +96,11 @@ export const deleteParticipant = (initialConnection, participant, setConnections
 export const changeParticipantDirection = (initialConnection, participant, setConnections) => {
     setConnections(connections => connections.map(connection => initialConnection.id === connection.id ? {
         ...initialConnection,
-        participants: initialConnection.participants.map(p => p === participant ? 
-            `${p.substring(0, 21)}${p.substring(21, 22) === "l" ? "r" : "l"}` 
+        participants: initialConnection.participants.map(p => p.id === participant.id ? 
+            {
+                id: p.id,
+                direction: p.direction === "left" ? "right" : "left"
+            }
             : p
         ),
     } : connection))

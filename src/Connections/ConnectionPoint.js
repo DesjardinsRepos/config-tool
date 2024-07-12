@@ -14,14 +14,14 @@ export default ({c, utils}) => {
     } = useContext(GlobalStateContext);
 
     const onLineDrop = (c, e) => {
-        if(selected.startsWith("&")) {
+        if(selected.currentlyLineDrawing) {
             setPanningEnabled(true)
 
             require("../general").addParticipantToConnection(
                 setSelected,
                 setConnections,
                 c,                              // initial connection
-                selected.substring(1, 23),      // connectionToAddID
+                selected,                    // connectionToAdd
                 {                               // last interacted position
                     x: e.clientX,
                     y: e.clientY
@@ -33,7 +33,7 @@ export default ({c, utils}) => {
     return (
         <Draggable scale={utils.instance.transformState.scale} 
             onStart={() => {
-                setSelected(c.id)
+                setSelected({id: c.id})
                 setPanningEnabled(false)
             }}
             onStop={() => setPanningEnabled(true)}
@@ -47,9 +47,9 @@ export default ({c, utils}) => {
             <div id={`${c.id}-wrapper`} onMouseUpCapture={e => onLineDrop(c, e)}
                 style={{height: "50px", width: "50px", cursor: "grab", position: "absolute"}}
             >
-                {c.id === selected ? 
+                {c.id === selected.id ? 
                     <svg height={6} width={6} style={{margin: "22px", position: "absolute"}}>
-                        <circle r={3} cx={3} cy={3} fill={c.id === selected ? "black" : "grey"}/>
+                        <circle r={3} cx={3} cy={3} fill={c.id === selected.id ? "black" : "grey"}/>
                     </svg>
                 :
                     <svg height={4} width={4} style={{margin: "23px", position: "absolute"}}>

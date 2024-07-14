@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import Device from "../Device/Device"
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import Connections from "../Connections/Connections"
@@ -8,7 +8,7 @@ import { useContext } from "react";
 import ConnectionPoint from "../Connections/ConnectionPoint";
 
 export default () => {
-    const { devices, connections, panningEnabled } = useContext(GlobalStateContext);
+    const { devices, connections, panningEnabled, setSelected } = useContext(GlobalStateContext);
 
 	const debugMarks = []
 	for(let i = 0; i < 11280; i += 500) {
@@ -24,6 +24,7 @@ export default () => {
                 disablePadding={true}
                 initialPositionX={-6480*(1+1.5/4)}
                 initialPositionY={-3760*(1+1.5/4)}
+                onPanning={() => setSelected({})} // should be optimized, or left out?
             >
                 {(utils) => (
                     <>
@@ -36,6 +37,7 @@ export default () => {
                         {devices.map(d => (
                             <Device dev={d} utils={utils} key={d.id}/>
                         ))}
+                        
                         {connections.map(c => (
                             c.participants.length > 2 && <ConnectionPoint c={c} utils={utils}/>
                         ))}

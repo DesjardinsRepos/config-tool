@@ -8,7 +8,6 @@ export default {
         height: "fit-content", 
         borderRadius: "12px", 
         backgroundColor: c.lightBlue, 
-        cursor: "pointer",
         position: "absolute"
     },
     activeShadow: {

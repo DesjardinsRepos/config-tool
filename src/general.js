@@ -86,11 +86,19 @@ export const addParticipantToConnection = (setSelected, setConnections, initialC
     setSelected({id: initialConnection.id})
 }
 
-export const deleteParticipant = (initialConnection, participant, setConnections) => {
-    setConnections(connections => connections.map(connection => initialConnection.id === connection.id ? {
-        ...initialConnection,
-        participants: initialConnection.participants.filter(p => p !== participant),
-    } : connection))
+export const deleteConnection = (connectionToDelete, setConnections, setSelected) => {
+    setConnections(connections => connections.filter(c => c.id !== connectionToDelete.id))
+    setSelected({})
+}
+
+export const deleteParticipant = (initialConnection, participant, setConnections, setSelected) => {
+    if(initialConnection.participants.length < 3) 
+        deleteConnection(initialConnection, setConnections, setSelected)
+    else    
+        setConnections(connections => connections.map(connection => initialConnection.id === connection.id ? {
+            ...initialConnection,
+            participants: initialConnection.participants.filter(p => p !== participant),
+        } : connection))
 }
 
 export const changeParticipantDirection = (initialConnection, participant, setConnections) => {

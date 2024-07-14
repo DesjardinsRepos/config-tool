@@ -8,9 +8,6 @@ export default {
         minHeight: "35px", 
         margin: "10px 0"
     },
-    serviceOpen: {
-        ...shadows.e
-    },
     header: {
         display: "flex"
     },

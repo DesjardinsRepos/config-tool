@@ -21,23 +21,21 @@ const App = ({input, callback}) => {
       const parseDevices = (async () => await Promise.all(
         input.roles
         .map(r => ({
-          id: require("./general").GENERATE_UID_10(),
+          id: r.name,
           name: r.name, 
           templateDevice: r.template_device,
           startPosition: r['x-esc-position']
         }))
         .map(async device => {
           const deviceData = await apiClient.getDevice(device.templateDevice)
-          const devId = require("./general.js").GENERATE_UID_10()
           
           return {
             ...device,
-            id: devId,
-            deviceData,
+            deviceData, // TODO remove old services
             services: deviceData.services.map(s => {
               return {
                 ...s,
-                id: devId + require("./general.js").GENERATE_UID_10()
+                id: require("./general.js").GENERATE_UID_10()
               }
             })
           }
@@ -46,13 +44,25 @@ const App = ({input, callback}) => {
       .then(updatedDevices => {
         console.log("updatedDevices", updatedDevices)
         setDevices(d => [...d, ...updatedDevices])
-      }))()
 
-      const parseConnections = () => {
-        input.serviceConfigurations.map(sc => {
-          // wieso hier namen. Eindeutigkeit????
-        })
-      }
+
+        const parseConnections = (() => {
+          setConnections(connections => [...connections, ...input.serviceConfigurations.map(sc => ({
+              ...sc, 
+              participants: sc.participants.map(p => ({
+                  direction: Math.random() < 0.5 ? "left" : "right",
+                  id: (() => {
+                    let parent = updatedDevices.find(d => d.id === p.role && d.services.some(s => s.serviceId === p.serviceId))
+                    return parent?.services.find(s => s.serviceId === p.serviceId).id || "service not found"
+                  })(),
+                  ...p
+              }))
+            })).filter(sc => 
+              !sc.participants.some(p => p.id === "service not found")
+            )
+          ])
+        })()
+      }))()
   })()}, [])
 
   

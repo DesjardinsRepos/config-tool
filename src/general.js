@@ -2,6 +2,8 @@ const UID_LENGTH = 10
 export const GENERATE_UID_10 = () => (Math.random() + 1).toString(36).substring(2).padEnd(UID_LENGTH, '0').substring(0, UID_LENGTH)
 
 export const findSelected = (selected, devices, connections) => {
+    if(!selected.id) alert("wrong findSelected format!")
+
     // check connections
     let obj = connections.find(obj => obj.id === selected?.id)
     if(obj) return ["connection", obj]

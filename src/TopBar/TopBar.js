@@ -9,7 +9,9 @@ export default ({}) => {
         mode, 
         setMode, 
         showConnections, 
-        setShowConnections 
+        setShowConnections,
+        devices,
+        connections
     } = useContext(GlobalStateContext);
     
     return (
@@ -34,7 +36,37 @@ export default ({}) => {
                 </>
             }
 
-            <button style={{...s.saveButton, ...s.button}}>
+            <button style={{...s.saveButton, ...s.button}} onClick={() => {
+                const string = JSON.stringify({
+                    status: "running",
+                    roles: devices.map(d => ({
+                        name: d.name, 
+                        template_device: d.templateDevice,
+                        'x-esc-position': d.startPosition
+                    })),
+                    serviceConfiguration: connections.map(c => ({
+                        id: c.id,
+                        serviceType: c.serviceType,
+                        configuration: {}, // TODO
+                        participants: c.participants.map(p => {
+                            let pp = require("../general.js").findSelected({id: p.id}, devices, connections)[1]
+                            return {
+                                serviceId: pp.service.serviceId,
+                                role: pp.parent.name,
+                                config: {},
+                            }
+                        })
+                    }))
+                }, null, 2)
+
+                const blob = new Blob([string], { type: 'application/json' })
+                const link = document.createElement('a')
+                link.href = URL.createObjectURL(blob);
+                link.download = 'myObject.json';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }}>
                 Save
             </button>
         </div>

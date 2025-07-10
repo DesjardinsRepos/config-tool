@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Draggable from 'react-draggable';
 import { colors as c } from "../styles.js";
 import s from "./Device.css"
+import { GlobalStateContext } from "../App.js"
+import { useContext } from "react";
 
 export default ({el}) => {
   	const [position, setPosition] = useState({ x: 0, y: -2 });
 	const [cursor, setCursor ] = useState("grab");
+    const { setDevices, devices } = useContext(GlobalStateContext);
+	const positionRef = useRef(null)
 
 	const InnerElement = () => (
 		<>
@@ -16,7 +20,7 @@ export default ({el}) => {
 	)
   	
 	return (
-		<div style={s.elementWrapper}>
+		<div style={s.elementWrapper} ref={positionRef}>
 			<InnerElement/>
 			
 			<div style ={{position: "absolute"}}>
@@ -24,10 +28,22 @@ export default ({el}) => {
 					position={position}
 					onStart={() => setCursor("grabbing")}
 					onStop={() => {
+						// reset UI
 						setPosition({ x: 0, y: -2 });
 						setCursor("grab")
-						alert(JSON.stringify(position))
+						
+						// device not in canvas, abort
+						if (position.x < 250) return
+
+						// create Device
+						const newDevice = require("../general.js").createDevice(el, position, positionRef)
+						
+						setDevices(devices => [ // TODO nur wenn in canvas
+							...devices,
+							newDevice
+						])
 					}}
+
 				    onDrag={(e, ui) => {
 						const { x, y } = ui;
 						setPosition({ x, y });

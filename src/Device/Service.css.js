@@ -8,14 +8,8 @@ export default {
         minHeight: "35px", 
         margin: "10px 0"
     },
-    serviceOpen: {
-        ...shadows.e
-    },
     header: {
         display: "flex"
-    },
-    leftConnection: {
-        margin: "auto 10px auto 15px"
     },
     img: {
         width: "25px", 
@@ -34,9 +28,6 @@ export default {
     },
     rotated: {
         transform: "rotate(0deg)"
-    },
-    rightConnection: {
-        margin: "auto 15px auto 0"
     },
     pinWrapper: {
         height: "fit-content", 

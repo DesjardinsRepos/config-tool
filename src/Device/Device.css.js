@@ -8,10 +8,17 @@ export default {
         height: "fit-content", 
         borderRadius: "12px", 
         backgroundColor: c.lightBlue, 
-        cursor: "pointer"
+        position: "absolute"
+    },
+    activeShadow: {
+        ...shadows.modC,
+        backgroundColor: "#b5cde3"
     },
     header: {
-        display: "flex"
+        display: "flex",
+        margin: "-10px 0 -3px 0",
+        padding: "10px 0",
+        cursor: "grab"
     },
     img: {
         width: "30px", 
@@ -27,6 +34,6 @@ export default {
         margin: "auto 0 auto auto"
     },
     servicesWrapper: {
-        padding: "7px 7px 0 7px"
+        padding: "0 7px 0 7px"
     }
 }

@@ -1,0 +1,10 @@
+open popup when connection is added to closed popup
+handle popup drop on pin (add to existing connection)
+
+(/) refactor pin representation
+(/) fix some bugs
+(/) devices löschen
+github pages deploy
+edit connections: filter for visible
+popup: cancel button/ mülleimer
+orange pins von derzeitiger edit connection markieren

@@ -1,7 +1,8 @@
-import Xarrow, {useXarrow} from 'react-xarrows';
+import {useXarrow} from 'react-xarrows';
 import {useTransformEffect} from "react-zoom-pan-pinch"
+import StaticConnections from './StaticConnections.js';
 
-export default () => {
+export default ({mode}) => {
     const update = useXarrow();
 
     useTransformEffect(() => {
@@ -11,13 +12,6 @@ export default () => {
     });
 
     return (
-        <Xarrow 
-        	start="dev0-1-r" 
-        	end="dev1-2-l" 
-        	showHead={false} 
-        	curveness={0.2} 
-        	color="black" 
-        	strokeWidth={1}
-        />
+        <StaticConnections mode={mode}/>
     )        
 }

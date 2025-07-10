@@ -1,37 +1,42 @@
-import {useState} from "react"
 import Draggable from "react-draggable";
 import Service from "./Service"
 import s from "./Device.css"
 import {useXarrow} from 'react-xarrows';
-import {useTransformEffect} from "react-zoom-pan-pinch"
+import { GlobalStateContext } from "../App.js"
+import { useContext } from "react";
 
-export default ({setPanningEnabled, id}) => {
+export default ({dev, utils}) => {
     const update = useXarrow();
-    const [scale, setScale] = useState(1)
+    const { setPanningEnabled, dragEnabled } = useContext(GlobalStateContext);
 
-    useTransformEffect(({ state }) => {
-        setScale(state.scale)
-    	console.log(state)
-        return () => {};
-    });
+    const { 
+        setSelected,
+        selected
+    } = useContext(GlobalStateContext);
+
 	// 4* 1620/940
     return (
-        <Draggable scale={scale} 
-            onStart={() => setPanningEnabled(false)} 
+        <Draggable scale={utils.instance.transformState.scale} 
+            handle=".drag-header"
+            onStart={() => {setPanningEnabled(false); setSelected({id: dev.id})}} 
             onStop={() => setPanningEnabled(true)}
-            onDrag={update}
+            onDrag={() => update()}
+            disabled={!dragEnabled}
 			bounds="parent"
-			defaultPosition={{x:6480*(1+1.5/4),y:3760*(1+1.5/4)}}
+			defaultPosition={require("../general.js").calculateInitialDevicePosition(
+                utils.instance.transformState, 
+                dev.startPosition
+            )}
         >
-            <div style={s.deviceWrapper}>
-                <div style={s.header}>
+            <div style={selected.id === dev.id ? {...s.deviceWrapper, ...s.activeShadow} : s.deviceWrapper}>
+                <div className="drag-header" style={s.header}>
                     <img style={s.img}/>
-                    <h3 style={s.title}>3-ACHS-PORTAL</h3>
+                    <h3 style={s.title}>{dev.name}</h3>
                     <img style={s.settings} src={require("../media/settings.png")}/>
                 </div>
                 <div style={s.servicesWrapper}>
-                    {[1, 2, 3].map(s => (
-                        <Service id={`${id}-${s}`}/>
+                    {dev.services && dev.services.map(s => (
+                        <Service ser={{...s, parentId: dev.id}} key={s.id}/>
                     ))}
                 </div>
             </div>

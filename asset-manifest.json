@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/config-tool/static/css/main.8714904c.css",
+    "main.js": "/config-tool/static/js/main.b98a5743.js",
+    "static/js/787.2c91ea6b.chunk.js": "/config-tool/static/js/787.2c91ea6b.chunk.js",
+    "static/media/settings.png": "/config-tool/static/media/settings.f7b1035622557c87aa8e.png",
+    "index.html": "/config-tool/index.html",
+    "static/media/javascript,__webpack_public_path__ = __webpack_base_uri__ = htmlWebpackPluginPublicPath;": "/config-tool/static/media/.1feff74faaf0efc6a044",
+    "main.8714904c.css.map": "/config-tool/static/css/main.8714904c.css.map",
+    "main.b98a5743.js.map": "/config-tool/static/js/main.b98a5743.js.map",
+    "787.2c91ea6b.chunk.js.map": "/config-tool/static/js/787.2c91ea6b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8714904c.css",
+    "static/js/main.b98a5743.js"
+  ]
+}
